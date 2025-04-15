@@ -15,13 +15,17 @@
             @csrf
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" id="username"
-                    placeholder="Masukkan Username">
+                <input type="text" name="username" id="username" class="form-control @error('username') is-invalid @enderror" placeholder="Masukkan username" value="{{ old('username') }}" required>
+                @error('username')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="password"
-                    placeholder="Masukkan Password">
+                <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password" required>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <input type="submit" value="Masuk" class="w-100 btn btn-dark mb-3">
             <a href="{{ route('register') }}">Belum Punya Akun? Klik Disini</a>

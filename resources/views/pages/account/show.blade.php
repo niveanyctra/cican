@@ -1,50 +1,45 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="container">
-        <div class="d-flex justify-content-between">
-            <h5>{{ $user->nama }}</h5>
-            @auth
-                @if ($user->id == Auth::user()->id)
-                    <a href="{{ route('user.edit', $user->id) }}" class="btn btn-dark">Edit Profil</a>
-                @endif
-            @endauth
-        </div>
-        <h6>{{ '@' . $user->username }} // {{ $user->email }}</h6>
-        <p>{{ $user->alamat }}</p>
-        <hr>
-        <div class="d-flex justify-content-between mb-4">
-            <h6>Album</h6>
-            @auth
-                @if ($user->id == Auth::user()->id)
-                    <a href="{{ route('album.create') }}" class="btn btn-success">Tambah Album</a>
-                @endif
-            @endauth
-        </div>
-        @foreach ($albums as $album)
-            <div class="d-flex justify-content-between">
-                <a href="{{ route('album.show', $album->id) }}" class="text-decoration-none text-dark">
-                    <p class="fw-bold">{{ $album->nama }}</p>
-                </a>
-                <div>
-                    <a href="{{ route('album.show', $album->id) }}" class="btn btn-dark">Lihat</a>
+        <!-- Header Profil -->
+        <div class="d-flex align-items-start mb-4">
+            <!-- Avatar -->
+            <div class="me-4">
+                <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
+                     width="150" height="150" class="rounded-circle" style="object-fit: cover;">
+            </div>
+
+            <!-- Informasi Profil -->
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5>{{ $user->username }}</h5>
                     @auth
                         @if ($user->id == Auth::user()->id)
-                            <a href="{{ route('album.edit', $album->id) }}" class="btn btn-secondary">Edit</a>
+                            <div class="d-flex align-items-center">
+                                <a href="{{ route('account.edit') }}" class="btn btn-dark me-2">Edit Profil</a>
+                                <a href="#" class="text-dark"><i class="fa-solid fa-gear"></i></a> <!-- Gear Icon -->
+                            </div>
                         @endif
                     @endauth
                 </div>
+                <h6>{{ $user->name }}</h6>
+                <p>{{ $user->bio ?? '' }}</p>
             </div>
-        @endforeach
-        <hr>
-        <div class="d-flex justify-content-between mb-4">
-            <h6>Foto</h6>
         </div>
+
+        <hr>
+
+        <!-- Postingan Pengguna -->
         <div class="row">
-            @foreach ($photos as $photo)
-                <div class="col-4 mb-2">
-                    <a href="{{ route('photo.show', $photo->id) }}">
-                        <img src="{{ Storage::url($photo->path) }}" alt="{{ Storage::url($photo->path) }}" width="300px"
-                            height="300px" style="object-fit: cover">
+            @foreach ($posts as $post)
+                <div class="col-4 mb-4">
+                    <a href="{{ route('posts.show', $post->id) }}">
+                        <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}"
+                             alt="Post Media"
+                             width="300px" height="300px"
+                             style="object-fit: cover;"
+                             class="img-fluid">
                     </a>
                 </div>
             @endforeach

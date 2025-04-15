@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->text('address');
+            $table->text('bio')->nullable();
+            $table->string('avatar')->default('default-avatar.jpg');
             $table->rememberToken();
             $table->timestamps();
         });

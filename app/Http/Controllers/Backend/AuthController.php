@@ -18,17 +18,23 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+        $request->validate(
+            [
+                'username' => 'required',
+                'password' => 'required',
+            ],
+            [
+                'username.required' => 'Username tidak boleh kosong',
+                'password.required' => 'Password tidak boleh kosong',
+            ]
+        );
         $user = User::where('username', $request->username)->first();
-        if(!$user)
-        {
-            return redirect('login');
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return redirect('login')
+                ->withErrors(['username' => 'Username atau password salah'])
+                ->withInput($request->only('username'));
         }
-        if(Hash::check($request->password, $user->password))
-        {
+        if (Hash::check($request->password, $user->password)) {
             Auth::loginUsingId($user->id);
             return redirect()->route('home');
         }

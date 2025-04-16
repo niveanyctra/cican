@@ -42,15 +42,27 @@
     @stack('styles')
 </head>
 
-<body class="flex bg-gray-100 min-h-screen">
-    @include('components.sidebar')
-    <main class="ml-64 p-8 w-full">
-        @yield('content')
+<body class="flex flex-col bg-gray-100 min-h-screen">
+    @auth
+        <div class="flex flex-1">
+            @include('components.sidebar')
+            <main class="flex-1 ml-64 p-8">
+                @yield('content')
+            </main>
+        </div>
+    @else
+        @include('components.navbar')
+        <main class="flex-1 mx-64 p-8">
+            @yield('content')
+        </main>
+    @endauth
 
-        <!-- Modal -->
+    <!-- Modal -->
+    @if(isset($post))
         @include('pages.post.create')
         @include('pages.post.edit')
-    </main>
+    @endif
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>

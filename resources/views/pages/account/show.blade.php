@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container px-40">
         <!-- Header Profil -->
         <div class="d-flex align-items-start mb-4">
             <!-- Avatar -->
@@ -12,18 +12,17 @@
 
             <!-- Informasi Profil -->
             <div class="flex-grow-1">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex gap-4 align-items-center">
                     <h5>{{ $user->username }}</h5>
                     @auth
                         @if ($user->id == Auth::user()->id)
                             <div class="d-flex align-items-center">
                                 <a href="{{ route('account.edit') }}" class="btn btn-dark me-2">Edit Profil</a>
-                                <a href="#" class="text-dark"><i class="fa-solid fa-gear"></i></a> <!-- Gear Icon -->
                             </div>
                         @endif
                     @endauth
                 </div>
-                <h6>{{ $user->name }}</h6>
+                <span class="fw-bold">{{ $user->name }}</span>
                 <p>{{ $user->bio ?? '' }}</p>
             </div>
         </div>
@@ -31,12 +30,15 @@
         <hr>
 
         <!-- Postingan Pengguna -->
-        <div class="row">
+        <div class="row gap-0">
             @foreach ($posts as $post)
-                <div class="col-4 mb-4">
+                <div class="col-4">
                     <a href="{{ route('posts.show', $post->id) }}">
-                        <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}"
-                            alt="Post Media" width="300px" height="300px" style="object-fit: cover;" class="img-fluid">
+                        <div
+                            style="width: 305px; height: 350px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                            <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}"
+                                alt="Post Media" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
                     </a>
                 </div>
             @endforeach

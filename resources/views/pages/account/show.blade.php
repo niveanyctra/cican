@@ -6,8 +6,8 @@
         <div class="d-flex align-items-start mb-4">
             <!-- Avatar -->
             <div class="me-4">
-                <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
-                     width="150" height="150" class="rounded-circle" style="object-fit: cover;">
+                <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar" width="150"
+                    height="150" class="rounded-circle" style="object-fit: cover;">
             </div>
 
             <!-- Informasi Profil -->
@@ -36,10 +36,7 @@
                 <div class="col-4 mb-4">
                     <a href="{{ route('posts.show', $post->id) }}">
                         <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}"
-                             alt="Post Media"
-                             width="300px" height="300px"
-                             style="object-fit: cover;"
-                             class="img-fluid">
+                            alt="Post Media" width="300px" height="300px" style="object-fit: cover;" class="img-fluid">
                     </a>
                 </div>
             @endforeach

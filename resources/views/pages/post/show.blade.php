@@ -19,14 +19,15 @@
                     - {{ $post->created_at->diffForHumans() }}
                 </p>
                 @auth
-                @if ($post->user_id == Auth::user()->id)
-                <div>
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editPostModal">
-                        Edit
-                    </button>
-                    <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger">Hapus</a>
-                </div>
-                @endif
+                    @if ($post->user_id == Auth::user()->id)
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                data-bs-target="#editPostModal">
+                                Edit
+                            </button>
+                            <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger">Hapus</a>
+                        </div>
+                    @endif
                 @endauth
             </div>
             <hr>
@@ -51,24 +52,20 @@
             @endforeach
             <div class="bottom-post">
                 <div id="like-section-{{ $post->id }}">
-                    <button
-                        id="like-button-{{ $post->id }}"
-                        onclick="toggleLike({{ $post->id }})"
-                    >
+                    <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
                         <!-- Ikon Like -->
-                        <i
-                            id="like-icon-{{ $post->id }}"
-                            class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"
-                        ></i>
+                        <i id="like-icon-{{ $post->id }}"
+                            class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
                     </button>
                     <!-- Jumlah Like -->
                     <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> likes
-                                        <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                        <span>{{ $post->comments->count() }} comments</span>
+                    <i class="fa-regular fa-comment fa-xl ms-2"></i>
+                    <span>{{ $post->comments->count() }} comments</span>
                 </div>
                 <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                     @csrf
-                    <input class="form-control form-control-sm" type="text" name="body" placeholder="Komentar . . ." style="width: 300px">
+                    <input class="form-control form-control-sm" type="text" name="body" placeholder="Komentar . . ."
+                        style="width: 300px">
                     <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                 </form>
             </div>

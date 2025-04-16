@@ -19,11 +19,15 @@
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('posts.edit', $post->id) }}">Edit</a></li>
                                     <li>
-                                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editPostModal">
+                                            Edit
+                                        </button>
+                                        {{-- <a class="dropdown-item" href="{{ route('posts.edit', $post->id) }}">Edit</a> --}}
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('posts.destroy', $post->id) }}" method="GET">
                                             @csrf
-                                            @method('DELETE')
                                             <button type="submit" class="dropdown-item text-danger">Hapus</button>
                                         </form>
                                     </li>
@@ -94,6 +98,7 @@
         @endforeach
     </div>
 </div>
+@stack('modal')
 @endsection
 
 @push('scripts')

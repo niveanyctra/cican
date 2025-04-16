@@ -21,12 +21,18 @@
                 @auth
                 @if ($post->user_id == Auth::user()->id)
                 <div>
-                    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-secondary">Edit</a>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editPostModal">
+                        Edit
+                    </button>
                     <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger">Hapus</a>
                 </div>
                 @endif
                 @endauth
             </div>
+            <hr>
+            <p>
+                {{ $post->caption }} <br> <br>
+            </p>
             <hr>
             @foreach ($comments as $comment)
                 <p>

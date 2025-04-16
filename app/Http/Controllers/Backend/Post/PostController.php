@@ -115,7 +115,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request,  $id)
     {
         // Validasi input
         $request->validate([
@@ -123,14 +123,11 @@ class PostController extends Controller
             'media.*' => 'nullable|array|min:0|max:5', // Minimal 0, maksimal 5 file baru
             'media.*' => 'nullable|file|mimes:jpeg,png,jpg,mp4|max:20480', // Maks 20MB per file
             'collaborators' => 'nullable|array', // Kolaborator opsional
-            'location' => 'nullable|string|max:255', // Lokasi opsional
         ]);
 
-        // Perbarui data post
-        $post->update([
-            'caption' => $request->caption,
-            'location' => $request->location,
-        ]);
+        $post = Post::findOrFail($id);
+        $post->caption = $request->caption;
+        $post->save();
 
         // Hapus media lama jika ada request untuk menghapus
         if ($request->has('delete_media')) {
@@ -180,8 +177,9 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
+        $post = Post::findOrFail($id);
         // Hapus semua media terkait
         foreach ($post->media as $media) {
             Storage::delete(str_replace('/storage', '/public', $media->file_url)); // Hapus file lokal
@@ -197,7 +195,7 @@ class PostController extends Controller
         // Hapus postingan
         $post->delete();
 
-        return redirect()->back()->with('success', 'Post deleted successfully!');
+        return redirect()->route('home')->with('success', 'Post deleted successfully!');
     }
 
     private function generateThumbnail($file)

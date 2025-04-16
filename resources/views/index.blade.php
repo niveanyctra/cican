@@ -13,7 +13,6 @@
                     <span class="text-muted">{{ $post->created_at->diffForHumans() }}</span>
 
                     <!-- Menu Titik Tiga untuk Edit/Hapus -->
-                    @auth
                         @if ($post->user_id === auth()->id())
                             <div class="dropdown ms-auto">
                                 <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -31,7 +30,6 @@
                                 </ul>
                             </div>
                         @endif
-                    @endauth
                 </div>
 
                 <!-- Media (Gambar/Video) -->
@@ -40,21 +38,22 @@
                 </a>
 
                 <!-- Like dan Komentar -->
-                @auth
-                    <form action="{{ route('likes.store', $post->id) }}" method="POST" class="mt-3 d-inline">
-                        @csrf
-                        @php
-                            $userLiked = $post->likes->contains(auth()->id());
-                        @endphp
-                        <button type="submit" style="border: 0; background-color: white;">
-                            <i class="{{ $userLiked ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                        </button>
-                    </form>
-                    <span>{{ $post->likes->count() }} likes</span>
-
-                    <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                    <span>{{ $post->comments->count() }} comments</span>
-                @endauth
+                <div id="like-section-{{ $post->id }}">
+                    <button
+                        id="like-button-{{ $post->id }}"
+                        onclick="toggleLike({{ $post->id }})"
+                    >
+                        <!-- Ikon Like -->
+                        <i
+                            id="like-icon-{{ $post->id }}"
+                            class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"
+                        ></i>
+                    </button>
+                    <!-- Jumlah Like -->
+                    <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> likes
+                                        <i class="fa-regular fa-comment fa-xl ms-2"></i>
+                                        <span>{{ $post->comments->count() }} comments</span>
+                </div>
 
                 <!-- Caption -->
                 <p class="mt-2">
@@ -62,13 +61,11 @@
                 </p>
 
                 <!-- Form Komentar -->
-                @auth
                     <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                         @csrf
                         <input class="form-control form-control-sm" type="text" name="body" placeholder="Komentar . . ." style="width: 500px">
                         <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                     </form>
-                @endauth
 
                 <hr>
             </div>
@@ -98,3 +95,52 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script>
+    function toggleLike(postId) {
+    const button = document.getElementById(`like-button-${postId}`);
+    const icon = document.getElementById(`like-icon-${postId}`);
+    const countElement = document.getElementById(`like-count-${postId}`);
+
+    // Tentukan apakah pengguna sudah menyukai postingan
+    const isLiked = icon.classList.contains('fa-solid');
+
+    // Tentukan URL dan method
+    const url = `/posts/${postId}/like`;
+    const method = isLiked ? 'DELETE' : 'POST';
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            // Update ikon like
+            if (isLiked) {
+                // Jika sebelumnya disukai, ubah ke tidak disukai
+                icon.classList.remove('fa-solid', 'text-danger');
+                icon.classList.add('fa-regular');
+            } else {
+                // Jika sebelumnya tidak disukai, ubah ke disukai
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid', 'text-danger');
+            }
+
+            // Update jumlah like
+            countElement.textContent = data.likeCount;
+
+            // Tampilkan pesan sukses (opsional)
+            console.log(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
+@endpush

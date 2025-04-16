@@ -93,9 +93,15 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        // Cari postingan
+        $post = Post::with(['user', 'likes', 'comments.user'])->findOrFail($id);
+
+        // Ambil semua komentar
+        $comments = $post->comments()->orderBy('created_at', 'desc')->get();
+
+        return view('pages.post.show', compact('post', 'comments'));
     }
 
     /**

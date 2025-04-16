@@ -43,10 +43,11 @@ class CommentController extends Controller
             $user->notify(new \App\Notifications\TaggedInCommentNotification($comment));
         }
 
-        return response()->json([
-            'message' => 'Comment added successfully.',
-            'comment' => $comment->load('user'), // Muat data user untuk frontend
-        ]);
+        return back();
+        // return response()->json([
+        //     'message' => 'Comment added successfully.',
+        //     'comment' => $comment->load('user'), // Muat data user untuk frontend
+        // ]);
     }
     public function destroy(Comment $comment)
     {
@@ -61,8 +62,9 @@ class CommentController extends Controller
         // Hapus komentar
         $comment->delete();
 
-        return response()->json([
-            'message' => 'Comment deleted successfully.',
-        ]);
+        return back();
+        // return response()->json([
+        //     'message' => 'Comment deleted successfully.',
+        // ]);
     }
 }

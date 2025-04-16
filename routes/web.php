@@ -38,14 +38,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/destroy', 'destroy')->name('destroy');
     });
 
-    Route::controller(LikeController::class)->prefix('posts')->name('likes.')->group(function () {
-        Route::post('/{post}/like', 'store')->name('store');
-        Route::delete('/{post}/like', 'destroy')->name('destroy');
-    });
+    Route::post('/posts/{id}/like', [LikeController::class, 'like'])->name('like');
+    Route::delete('/posts/{id}/like', [LikeController::class, 'like']);
+    // Route::controller(LikeController::class)->prefix('posts')->name('likes.')->group(function () {
+    //     Route::post('/{post}/like', 'store')->name('store');
+    //     Route::delete('/{post}/like', 'destroy')->name('destroy');
+    // });
 
     Route::controller(CommentController::class)->prefix('posts')->name('comments.')->group(function () {
         Route::post('/{post}/comments', 'store')->name('store');
-        Route::delete('/comments/{comment}', 'destroy')->name('destroy');
+        Route::get('/comments/{comment}', 'destroy')->name('destroy');
     });
 
     Route::controller(NotificationController::class)->prefix('notifications')->name('notifications.')->group(function () {

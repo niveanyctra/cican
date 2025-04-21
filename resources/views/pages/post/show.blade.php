@@ -10,7 +10,7 @@
 @endpush
 @section('content')
     <div class="d-flex">
-        <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}" alt="Post Media" width="600px">
+        <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}" alt="Post Media" style="width: 550px">
         <div class="container" style="margin-left: 50px">
             <div class="d-flex justify-content-between">
                 <p>

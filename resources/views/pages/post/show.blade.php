@@ -30,11 +30,11 @@
                     @endif
                 @endauth
             </div>
-            <hr>
+            <hr class="my-3">
             <p>
                 {{ $post->caption }} <br> <br>
             </p>
-            <hr>
+            <hr class="my-3">
             @foreach ($comments as $comment)
                 <p>
                     <a href="{{ route('user.show', $comment->user->username) }}"
@@ -51,7 +51,7 @@
                 </p>
             @endforeach
             <div class="bottom-post">
-                <div id="like-section-{{ $post->id }}">
+                <div id="like-section-{{ $post->id }}" class="ms-2 my-2">
                     <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
                         <!-- Ikon Like -->
                         <i id="like-icon-{{ $post->id }}"
@@ -65,7 +65,7 @@
                 <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                     @csrf
                     <input class="form-control form-control-sm" type="text" name="body" placeholder="Komentar . . ."
-                        style="width: 300px">
+                        style="width: 400px">
                     <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                 </form>
             </div>

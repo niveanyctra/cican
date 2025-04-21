@@ -8,7 +8,7 @@
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
-                            width="40px" height="40px" class="rounded-circle me-2" style="max-height: 40px; max-width: 40px ;">
+                            style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
                         <a href="{{ route('user.show', $post->user->username) }}"
                             class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
                         <span class="mx-1">•</span>
@@ -47,7 +47,7 @@
                     </a>
 
                     <!-- Like dan Komentar -->
-                    <div id="like-section-{{ $post->id }}">
+                    <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
                         <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
                             <!-- Ikon Like -->
                             <i id="like-icon-{{ $post->id }}"
@@ -83,7 +83,7 @@
 
         <!-- Sidebar Pengguna -->
         <div class="col-3">
-            <h3>All Users</h3>
+            <h3 class="mb-3">All Users</h3>
             @foreach ($users as $user)
                 <div class="mb-3">
                     <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
@@ -91,7 +91,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
-                                        style="max-width: 40px; height: 40px;" class="rounded-circle me-2">
+                                        style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
                                     <div>
                                         <strong>{{ $user->username }}</strong> <br>
                                         <small style="font-size: 13px">{{ $user->name }}</small>

@@ -6,8 +6,7 @@
         <div class="d-flex align-items-start mb-4">
             <!-- Avatar -->
             <div class="me-4 profile">
-                <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar" max-width="50"
-                    height="50" class="rounded-circle" style="object-fit: cover;">
+                <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar" class="rounded-circle" style="object-fit: cover; width: 70px; height: 70px;">
             </div>
 
             <!-- Informasi Profil -->
@@ -27,7 +26,7 @@
             </div>
         </div>
 
-        <hr>
+        <hr class="my-3">
 
         <!-- Postingan Pengguna -->
         <div class="row gap-0">

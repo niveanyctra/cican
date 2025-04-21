@@ -5,9 +5,9 @@
         <!-- Header Profil -->
         <div class="d-flex align-items-start mb-4">
             <!-- Avatar -->
-            <div class="me-4">
-                <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar" width="150"
-                    height="150" class="rounded-circle" style="object-fit: cover;">
+            <div class="me-4 profile">
+                <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar" max-width="50"
+                    height="50" class="rounded-circle" style="object-fit: cover;">
             </div>
 
             <!-- Informasi Profil -->

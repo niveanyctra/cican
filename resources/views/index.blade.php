@@ -6,7 +6,7 @@
             @foreach ($posts as $post)
                 <div class="mb-3 px-32">
                     <!-- Avatar dan Username -->
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
                             width="40" height="40" class="rounded-circle me-2">
                         <a href="{{ route('user.show', $post->user->username) }}"
@@ -91,7 +91,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
-                                        width="40" height="40" class="rounded-circle me-2">
+                                        style="max-width: 40px; height: 40px;" class="rounded-circle me-2">
                                     <div>
                                         <strong>{{ $user->username }}</strong> <br>
                                         <small style="font-size: 13px">{{ $user->name }}</small>

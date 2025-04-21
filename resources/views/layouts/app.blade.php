@@ -48,6 +48,11 @@
             @include('components.sidebar')
             <main class="flex-1 ml-64 p-8">
                 @yield('content')
+                <!-- Modal -->
+                @include('pages.post.create')
+                @if (isset($post))
+                    @include('pages.post.edit')
+                @endif
             </main>
         </div>
     @else
@@ -56,12 +61,6 @@
             @yield('content')
         </main>
     @endauth
-
-    <!-- Modal -->
-    @if(isset($post))
-        @include('pages.post.create')
-        @include('pages.post.edit')
-    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

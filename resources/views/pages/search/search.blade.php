@@ -1,51 +1,67 @@
-<!-- Live Search Modal -->
-<div class="modal fade" id="liveSearchModal" tabindex="-1" aria-labelledby="liveSearchModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<!-- Modal Search User -->
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-3">
             <div class="modal-header">
-                <h5 class="modal-title" id="liveSearchModalLabel">Live Search</h5>
+                <h5 class="modal-title" id="searchModalLabel">Cari Pengguna</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <input type="text" id="liveSearchInput" class="form-control" placeholder="Search...">
-                </div>
-                <ul class="list-group" id="searchResults">
-                    <!-- Search results will be dynamically populated here -->
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input type="text" id="liveSearchInput" class="form-control" placeholder="Cari berdasarkan nama atau username...">
+                <div id="searchResults" class="mt-3"></div>
             </div>
         </div>
     </div>
 </div>
-
+@push('scripts')
 <script>
-    document.getElementById('liveSearchInput').addEventListener('input', function () {
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('liveSearchInput');
+    const resultsContainer = document.getElementById('searchResults');
+
+    // Event listener ketika input berubah
+    searchInput.addEventListener('input', function() {
         const query = this.value.trim();
-        const resultsContainer = document.getElementById('searchResults');
-        resultsContainer.innerHTML = '';
 
-        if (query.length > 0) {
-            // Simulate fetching search results
-            const results = ['Result 1', 'Result 2', 'Result 3'].filter(item =>
-                item.toLowerCase().includes(query.toLowerCase())
-            );
-
-            if (results.length > 0) {
-                results.forEach(result => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item';
-                    listItem.textContent = result;
-                    resultsContainer.appendChild(listItem);
-                });
-            } else {
-                const noResults = document.createElement('li');
-                noResults.className = 'list-group-item text-muted';
-                noResults.textContent = 'No results found';
-                resultsContainer.appendChild(noResults);
-            }
+        if (query.length < 2) {
+            resultsContainer.innerHTML = ''; // Kosongkan hasil jika input kurang dari 2 karakter
+            return;
         }
+
+        // Fetch data dari server berdasarkan query
+        fetch(`{{ route('search.user') }}?query=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                let html = '';
+
+                // Kalau data kosong, tampilkan pesan
+                if (data.length === 0) {
+                    html = '<p class="text-muted">Tidak ditemukan.</p>';
+                } else {
+                    // Tampilkan setiap user di hasil pencarian
+                    data.forEach(user => {
+                        const avatar = user.avatar ? `/storage/${user.avatar}` : '/images/default-avatar.png'; // Path avatar
+                        html += `
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
+                                <div>
+                                    <strong>${user.name}</strong><br>
+                                    <small>@${user.username}</small><br>
+                                    <small class="text-muted">${user.bio ?? ''}</small>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Menampilkan hasil pencarian di container
+                resultsContainer.innerHTML = html;
+            })
+            .catch(err => {
+                console.error('Error saat fetch:', err);
+                resultsContainer.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
+            });
     });
+});
 </script>
+@endpush

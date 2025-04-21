@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\SearchController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -54,4 +55,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/mark-as-read', 'markAsRead')->name('markAsRead');
     });
+    Route::controller(SearchController::class)->prefix('search')->name('search.')->group(function () {
+        Route::get('/user', 'searchUser')->name('user');
+    });
+
+
 });

@@ -16,7 +16,7 @@
             </li>
             <li>
                 <button type="button" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900 w-full"
-                    data-bs-toggle="modal" data-bs-target="#liveSearchModal">
+                    data-bs-toggle="modal" data-bs-target="#searchModal">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

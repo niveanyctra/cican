@@ -11,7 +11,7 @@
 @section('content')
     <div class="d-flex">
         <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}" alt="Post Media" width="600px">
-        <div class="container" style="margin-left: 50px; max-height: 50px; max-width: 50px;">
+        <div class="container" style="margin-left: 50px;">
             <div class="d-flex justify-content-between">
                 <p>
                     <a href="{{ route('user.show', $post->user->username) }}"

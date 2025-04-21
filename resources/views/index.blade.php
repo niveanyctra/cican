@@ -8,7 +8,7 @@
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
-                            width="40" height="40" class="rounded-circle me-2">
+                            width="40px" height="40px" class="rounded-circle me-2" style="max-height: 40px; max-width: 40px ;">
                         <a href="{{ route('user.show', $post->user->username) }}"
                             class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
                         <span class="mx-1">•</span>

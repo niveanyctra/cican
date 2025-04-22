@@ -55,6 +55,7 @@
                 <!-- Modal -->
                 @include('pages.post.create')
                 @include('pages.search.search')
+                @include('components.follow-modal')
                 @if (isset($post))
                     @include('pages.post.edit')
                 @endif

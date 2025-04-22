@@ -1,4 +1,3 @@
-<!-- Modal Search User -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content p-3">
@@ -18,29 +17,23 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('liveSearchInput');
     const resultsContainer = document.getElementById('searchResults');
-
-    // Event listener ketika input berubah
     searchInput.addEventListener('input', function() {
         const query = this.value.trim();
 
         if (query.length < 2) {
-            resultsContainer.innerHTML = ''; // Kosongkan hasil jika input kurang dari 2 karakter
+            resultsContainer.innerHTML = '';
             return;
         }
 
-        // Fetch data dari server berdasarkan query
         fetch(`{{ route('search.user') }}?query=${encodeURIComponent(query)}`)
             .then(res => res.json())
             .then(data => {
                 let html = '';
-
-                // Kalau data kosong, tampilkan pesan
                 if (data.length === 0) {
                     html = '<p class="text-muted">Tidak ditemukan.</p>';
                 } else {
-                    // Tampilkan setiap user di hasil pencarian
                     data.forEach(user => {
-                        const avatar = user.avatar ? `/storage/${user.avatar}` : '/images/default-avatar.png'; // Path avatar
+                        const avatar = user.avatar ? `/storage/${user.avatar}` : '/images/default-avatar.png';
                         html += `
                             <div class="d-flex align-items-center mb-3">
                                 <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
@@ -53,8 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
                     });
                 }
-
-                // Menampilkan hasil pencarian di container
                 resultsContainer.innerHTML = html;
             })
             .catch(err => {

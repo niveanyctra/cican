@@ -10,7 +10,7 @@
                     @forelse ($user->followers as $follower)
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="d-flex align-items-center">
-                                <img src="{{ Storage::url($follower->avatar ?? 'default-avatar.png') }}" class="rounded-circle me-3" width="45" height="45" style="object-fit: cover; max-width: 45px;height: 45px;">
+                                <img src="{{ Storage::url($follower->avatar ?? asset('default-image.jpg')) }}" class="rounded-circle me-3" width="45" height="45" style="object-fit: cover; max-width: 45px;height: 45px;">
                                 <div>
                                     <div class="fw-bold">{{ $follower->name }}</div>
                                     <small class="text-muted">{{ $follower->username }}</small>
@@ -47,7 +47,7 @@
                     @forelse ($user->followings as $following)
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="d-flex align-items-center">
-                                <img src="{{ Storage::url($following->avatar ?? 'default-avatar.png') }}" class="rounded-circle me-3" width="45" height="45" style="object-fit: cover;max-width: 45px;height: 45px;">
+                                <img src="{{ Storage::url($following->avatar ?? asset('default-image.jpg')) }}" class="rounded-circle me-3" width="45" height="45" style="object-fit: cover;max-width: 45px;height: 45px;">
                                 <div>
                                     <div class="fw-bold">{{ $following->name }}</div>
                                     <small class="text-muted">{{ $following->username }}</small>

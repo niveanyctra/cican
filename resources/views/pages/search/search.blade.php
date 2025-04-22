@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     html = '<p class="text-muted">Tidak ditemukan.</p>';
                 } else {
                     data.forEach(user => {
-                        const avatar = user.avatar ? `/storage/${user.avatar}` : '/images/default-avatar.png';
+                        const avatar = user.avatar ? `/storage/${user.avatar}` : asset('default-image.jpg');
                         html += `
                             <div class="d-flex align-items-center mb-3">
                                 <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">

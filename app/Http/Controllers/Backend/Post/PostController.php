@@ -130,7 +130,7 @@ class PostController extends Controller
             'caption' => 'nullable|string|max:2000', // Caption opsional, maks 2000 karakter
             'media.*' => 'nullable|array|min:0|max:5', // Minimal 0, maksimal 5 file baru
             'media.*' => 'nullable|file|mimes:jpeg,png,jpg,mp4|max:20480', // Maks 20MB per file
-            'collaborators' => 'nullable|array', // Kolaborator opsional
+            'collaborators' => 'nullable|string', // Kolaborator opsional
         ]);
 
         $post = Post::findOrFail($id);
@@ -174,9 +174,12 @@ class PostController extends Controller
         $mentionedUsers = TagHelper::extractMentions($request->caption);
         $post->taggedUsers()->sync($mentionedUsers); // Sync untuk mengganti tag lama dengan yang baru
 
-        // Perbarui kolaborator (jika ada)
-        if ($request->collaborators) {
-            $post->collaborators()->sync($request->collaborators); // Sync untuk mengganti kolaborator lama
+        // Simpan collaborators
+        if ($request->has('collaborators')) {
+            $collaboratorIds = array_filter(explode(',', $request->collaborators)); // Pisahkan ID dan hapus nilai kosong
+            $post->collaborators()->sync($collaboratorIds); // Sinkronisasi kolaborator
+        } else {
+            $post->collaborators()->detach(); // Hapus semua kolaborator jika tidak ada yang dipilih
         }
 
         return redirect()->back()->with('success', 'Post updated successfully!');

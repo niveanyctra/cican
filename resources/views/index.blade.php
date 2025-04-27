@@ -7,7 +7,7 @@
                 <div class="mb-3 px-32">
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
-                        <img src="{{ Storage::url($post->user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
+                        <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}" alt="Avatar"
                             style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
                         <a href="{{ route('user.show', $post->user->username) }}"
                             class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
@@ -21,7 +21,7 @@
                                 <span class="text-muted">+{{ $post->collaborators->count() - 1 }}</span>
                             @endif
                         @endif
-                        
+
                         <span class="mx-1">•</span>
                         <span class="text-muted">{{ $post->created_at->diffForHumans() }}</span>
 
@@ -35,10 +35,9 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#editPostModal">
+                                            data-bs-target="#editPostModal{{ $post->id }}">
                                             Edit
                                         </button>
-                                        {{-- <a class="dropdown-item" href="{{ route('posts.edit', $post->id) }}">Edit</a> --}}
                                     </li>
                                     <li>
                                         <form action="{{ route('posts.destroy', $post->id) }}" method="GET">

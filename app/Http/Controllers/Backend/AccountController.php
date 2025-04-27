@@ -93,8 +93,8 @@ class AccountController extends Controller
         // Update avatar jika ada file baru
         if ($request->hasFile('avatar')) {
             // Hapus avatar lama jika ada
-            if ($user->avatar && Storage::exists($user->avatar)) {
-                Storage::delete($user->avatar);
+            if ($user->avatar) {
+                Storage::disk('public')->delete('avatars/' . basename($user->avatar));
             }
 
             // Simpan avatar baru
@@ -119,8 +119,8 @@ class AccountController extends Controller
         $user = User::findOrFail($id);
 
         // Hapus avatar jika ada
-        if ($user->avatar && Storage::exists($user->avatar)) {
-            Storage::delete($user->avatar);
+        if ($user->avatar) {
+            Storage::disk('public')->delete('avatars/' . basename($user->avatar));
         }
 
         // Hapus akun pengguna

@@ -6,7 +6,9 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Media;
 use App\Helpers\TagHelper;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -134,7 +136,7 @@ class PostController extends Controller
             foreach ($request->delete_media as $mediaId) {
                 $media = Media::find($mediaId);
                 if ($media && $media->post_id === $post->id) {
-                    Storage::delete(str_replace('/storage', '/public', $media->file_url)); // Hapus file lokal
+                    Storage::disk('public')->delete('posts/' . basename($media->file_url));
                     $media->delete(); // Hapus dari database
                 }
             }
@@ -182,7 +184,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         // Hapus semua media terkait
         foreach ($post->media as $media) {
-            Storage::delete(str_replace('/storage', '/public', $media->file_url)); // Hapus file lokal
+            Storage::disk('public')->delete('posts/' . basename($media->file_url));
             $media->delete(); // Hapus dari database
         }
 

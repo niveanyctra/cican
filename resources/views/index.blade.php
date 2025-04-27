@@ -7,7 +7,7 @@
                 <div class="mb-3 px-32">
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
-                        <img src="{{ Storage::url($post->user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
+                        <img src="{{ Storage::url($post->user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
                             style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
                         <a href="{{ route('user.show', $post->user->username) }}"
                             class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
@@ -42,7 +42,7 @@
 
                     <!-- Media (Gambar/Video) -->
                     <a href="{{ route('posts.show', $post->id) }}">
-                        <img src="{{ Storage::url($post->media->first()->file_url ?? 'default-image.jpg') }}"
+                        <img src="{{ Storage::url($post->media->first()->file_url ?? asset('default-image.jpg')) }}"
                             alt="Post Media" width="100%" class="img-fluid mt-2">
                     </a>
 
@@ -90,7 +90,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ Storage::url($user->avatar ?? 'default-avatar.png') }}" alt="Avatar"
+                                    <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
                                         style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
                                     <div>
                                         <strong>{{ $user->username }}</strong> <br>

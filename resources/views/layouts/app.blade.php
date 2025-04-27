@@ -12,8 +12,8 @@
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
-    {{-- <style>
-        .sidebar {
+    <style>
+        /* .sidebar {
             position: fixed;
             z-index: 1;
             left: 0;
@@ -37,8 +37,12 @@
 
         main {
             margin: 50px 50px 0 350px;
+        } */
+        .profile img{
+            max-width: 150px;
+            height: 150px;
         }
-    </style> --}}
+    </style>
     @stack('styles')
 </head>
 
@@ -50,6 +54,8 @@
                 @yield('content')
                 <!-- Modal -->
                 @include('pages.post.create')
+                @include('pages.search.search')
+                @include('components.follow-modal')
                 @if (isset($post))
                     @include('pages.post.edit')
                 @endif

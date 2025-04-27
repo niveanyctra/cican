@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Backend\FollowController;
+use App\Http\Controllers\Backend\SearchController;
 use App\Http\Controllers\Backend\AccountController;
 use App\Http\Controllers\Backend\Post\LikeController;
 use App\Http\Controllers\Backend\Post\PostController;
@@ -54,4 +56,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/mark-as-read', 'markAsRead')->name('markAsRead');
     });
+
+    Route::controller(SearchController::class)->prefix('search')->name('search.')->group(function () {
+        Route::get('/user', 'searchUser')->name('user');
+    });
+
+    Route::controller(FollowController::class)->prefix('follow')->name('follow.')->group(function () {
+        Route::post('/follow-toggle/{user}', 'toggle')->name('toggle');
+        Route::post('/follow/{user}', 'follow')->name('follow');
+        Route::post('/unfollow/{user}', 'unfollow')->name('unfollow');
+    });
+
 });

@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'bio',
     ];
 
     /**
@@ -44,5 +46,52 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications()->whereNull('read_at');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function likedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'likes');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    // Relasi untuk kolaborasi
+    public function collaborations()
+    {
+        return $this->belongsToMany(Post::class, 'collaborations');
+    }
+
+    // Relasi untuk tagging
+    public function taggedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'post_tags');
+    }
+
+    public function taggedComments()
+    {
+        return $this->belongsToMany(Comment::class, 'comment_tags');
+    }
+
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id');
+    }
+    
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id');
     }
 }

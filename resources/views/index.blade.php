@@ -11,6 +11,17 @@
                             style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
                         <a href="{{ route('user.show', $post->user->username) }}"
                             class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
+
+                        <!-- Tampilkan Collaborator -->
+                        @if ($post->collaborators->count() > 0)
+                            <span class="mx-1">&</span>
+                            <a href="{{ route('user.show', $post->collaborators->first()->username) }}"
+                                class="text-decoration-none text-dark fw-bold">{{ $post->collaborators->first()->username }}</a>
+                            @if ($post->collaborators->count() > 1)
+                                <span class="text-muted">+{{ $post->collaborators->count() - 1 }}</span>
+                            @endif
+                        @endif
+                        
                         <span class="mx-1">•</span>
                         <span class="text-muted">{{ $post->created_at->diffForHumans() }}</span>
 
@@ -90,8 +101,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
-                                        style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
+                                    <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}"
+                                        alt="Avatar" style="object-fit: cover; width: 40px; height: 40px;"
+                                        class="rounded-circle me-2">
                                     <div>
                                         <strong>{{ $user->username }}</strong> <br>
                                         <small style="font-size: 13px">{{ $user->name }}</small>

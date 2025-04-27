@@ -8,6 +8,8 @@ use App\Models\Media;
 use App\Helpers\TagHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Collaboration;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -41,15 +43,13 @@ class PostController extends Controller
             'caption' => 'nullable|string|max:2000', // Caption opsional, maks 2000 karakter
             'media.*' => 'required|array|min:1|max:5', // Minimal 1, maksimal 5 file
             'media.*' => 'file|mimes:jpeg,png,jpg,mp4|max:20480', // Maks 20MB per file
-            'collaborators' => 'nullable|array', // Kolaborator opsional
-            'location' => 'nullable|string|max:255', // Lokasi opsional
+            'collaborators' => 'nullable|string', // Kolaborator opsional
         ]);
 
         // Simpan data post
         $post = Post::create([
             'user_id' => Auth::user()->id,
             'caption' => $request->caption,
-            'location' => $request->location,
         ]);
 
         // Simpan media (gambar/video)
@@ -78,9 +78,15 @@ class PostController extends Controller
         $mentionedUsers = TagHelper::extractMentions($request->caption);
         $post->taggedUsers()->attach($mentionedUsers);
 
-        // Simpan kolaborator (jika ada)
+        // Simpan collaborators
         if ($request->collaborators) {
-            $post->collaborators()->attach($request->collaborators);
+            $collaboratorIds = explode(',', $request->collaborators);
+            foreach ($collaboratorIds as $userId) {
+                Collaboration::create([
+                    'post_id' => $post->id,
+                    'user_id' => $userId,
+                ]);
+            }
         }
 
         // Kirim notifikasi ke pengguna yang ditag

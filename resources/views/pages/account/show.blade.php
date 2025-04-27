@@ -6,8 +6,8 @@
         <div class="d-flex align-items-start mb-4">
             <!-- Avatar -->
             <div class="me-4 profile">
-                <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar" class="rounded-circle"
-                    style="object-fit: cover; width: 70px; height: 70px;">
+                <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
+                    class="rounded-circle" style="object-fit: cover; width: 70px; height: 70px;">
             </div>
 
             <!-- Informasi Profil -->

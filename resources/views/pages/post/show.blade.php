@@ -10,13 +10,26 @@
 @endpush
 @section('content')
     <div class="d-flex">
-        <img src="{{ Storage::url($post->media->first()->file_url ?? asset('default-image.jpg')) }}" alt="Post Media" style="width: 550px">
+        <img src="{{ Storage::url($post->media->first()->file_url ?? asset('default-image.jpg')) }}" alt="Post Media"
+            style="width: 550px">
         <div class="container" style="margin-left: 50px">
             <div class="d-flex justify-content-between">
                 <p>
                     <a href="{{ route('user.show', $post->user->username) }}"
                         class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
-                    - {{ $post->created_at->diffForHumans() }}
+
+                    <!-- Tampilkan Collaborator -->
+                    @if ($post->collaborators->count() > 0)
+                        <span class="mx-1">&</span>
+                        <a href="{{ route('user.show', $post->collaborators->first()->username) }}"
+                            class="text-decoration-none text-dark fw-bold">{{ $post->collaborators->first()->username }}</a>
+                        @if ($post->collaborators->count() > 1)
+                            <span class="text-muted">+{{ $post->collaborators->count() - 1 }}</span>
+                        @endif
+                    @endif
+
+                    <span class="mx-1">•</span>
+                    <span class="text-muted">{{ $post->created_at->diffForHumans() }}</span>
                 </p>
                 @auth
                     @if ($post->user_id == Auth::user()->id)

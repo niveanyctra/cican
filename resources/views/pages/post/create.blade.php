@@ -38,7 +38,7 @@
                         <div id="selectedCollaborators" class="mt-3"></div>
 
                         <!-- Input Hidden untuk Menyimpan ID Collaborators -->
-                        <input type="hidden" name="collaborators" id="collaboratorsInput">
+                        <input type="hidden" name="collaborators" id="collaboratorsInputCreate">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -53,18 +53,18 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchUsers');
-            const resultsContainer = document.createElement('div'); // Wadah hasil pencarian
-            searchInput.parentNode.appendChild(resultsContainer);
-            const selectedCollaboratorsDiv = document.getElementById('selectedCollaborators');
-            const collaboratorsInput = document.getElementById('collaboratorsInput');
-            let selectedUsers = []; // Array untuk menyimpan ID collaborator yang dipilih
+            const searchInputCreate = document.getElementById('searchUsers');
+            const resultsContainerCreate = document.createElement('div'); // Wadah hasil pencarian
+            searchInputCreate.parentNode.appendChild(resultsContainerCreate);
+            const selectedCollaboratorsDivCreate = document.getElementById('selectedCollaborators');
+            const collaboratorsInputCreate = document.getElementById('collaboratorsInputCreate');
+            let selectedUsersCreate = []; // Array untuk menyimpan ID collaborator yang dipilih
 
-            searchInput.addEventListener('input', function() {
+            searchInputCreate.addEventListener('input', function() {
                 const query = this.value.trim();
 
                 if (query.length < 2) {
-                    resultsContainer.innerHTML = '';
+                    resultsContainerCreate.innerHTML = '';
                     return;
                 }
 
@@ -78,12 +78,12 @@
                         } else {
                             data.forEach(user => {
                                 // Jangan tampilkan user yang sudah dipilih atau user yang sedang login
-                                if (!selectedUsers.includes(user.id) && user.id !==
+                                if (!selectedUsersCreate.includes(user.id) && user.id !==
                                     {{ auth()->id() }}) {
                                     const avatar = user.avatar ? `/storage/${user.avatar}` :
                                         '{{ asset('default-image.jpg') }}';
                                     html += `
-                                <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer" onclick="selectUser(${user.id}, '${user.name}', '${user.username}')">
+                                <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer" onclick="selectUserCreate(${user.id}, '${user.name}', '${user.username}')">
                                     <div class="d-flex align-items-center">
                                         <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
                                         <div>
@@ -96,55 +96,55 @@
                                 }
                             });
                         }
-                        resultsContainer.innerHTML = html;
+                        resultsContainerCreate.innerHTML = html;
                     })
                     .catch(err => {
                         console.error('Error saat fetch:', err);
-                        resultsContainer.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
+                        resultsContainerCreate.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
                     });
             });
 
             // Fungsi untuk menangani pemilihan user
-            window.selectUser = function(userId, name, username) {
+            window.selectUserCreate = function(userId, name, username) {
                 // Tambahkan user ke array jika belum ada
-                if (!selectedUsers.includes(userId)) {
-                    selectedUsers.push(userId);
+                if (!selectedUsersCreate.includes(userId)) {
+                    selectedUsersCreate.push(userId);
 
                     // Tampilkan user yang dipilih
-                    const displayValue = `${name} (@${username})`;
-                    const collaboratorDiv = document.createElement('div');
-                    collaboratorDiv.className = 'd-flex align-items-center mb-2';
-                    collaboratorDiv.innerHTML = `
-                <span class="me-2">${displayValue}</span>
-                <button type="button" class="btn btn-sm btn-danger" onclick="removeUser(${userId})">Hapus</button>
+                    const displayValueCreate = `${name} (@${username})`;
+                    const collaboratorDivCreate = document.createElement('div');
+                    collaboratorDivCreate.className = 'd-flex align-items-center mb-2';
+                    collaboratorDivCreate.innerHTML = `
+                <span class="me-2">${displayValueCreate}</span>
+                <button type="button" class="btn btn-sm btn-danger" onclick="removeUserCreate(${userId})">Hapus</button>
             `;
-                    selectedCollaboratorsDiv.appendChild(collaboratorDiv);
+                    selectedCollaboratorsDivCreate.appendChild(collaboratorDivCreate);
 
                     // Perbarui nilai input hidden
-                    collaboratorsInput.value = selectedUsers.join(',');
+                    collaboratorsInputCreate.value = selectedUsersCreate.join(',');
 
                     // Kosongkan hasil pencarian
-                    resultsContainer.innerHTML = '';
-                    searchInput.value = ''; // Reset input pencarian
+                    resultsContainerCreate.innerHTML = '';
+                    searchInputCreate.value = ''; // Reset input pencarian
                 }
             };
 
             // Fungsi untuk menghapus user dari daftar
-            window.removeUser = function(userId) {
+            window.removeUserCreate = function(userId) {
                 // Hapus user dari array
-                selectedUsers = selectedUsers.filter(id => id !== userId);
+                selectedUsersCreate = selectedUsersCreate.filter(id => id !== userId);
 
                 // Hapus elemen DOM yang sesuai
-                const collaboratorDivs = selectedCollaboratorsDiv.querySelectorAll('div');
-                collaboratorDivs.forEach(div => {
+                const collaboratorDivsCreate = selectedCollaboratorsDivCreate.querySelectorAll('div');
+                collaboratorDivsCreate.forEach(div => {
                     const button = div.querySelector('button');
-                    if (button && button.onclick.toString().includes(`removeUser(${userId})`)) {
+                    if (button && button.onclick.toString().includes(`removeUserCreate(${userId})`)) {
                         div.remove();
                     }
                 });
 
                 // Perbarui nilai input hidden
-                collaboratorsInput.value = selectedUsers.join(',');
+                collaboratorsInputCreate.value = selectedUsersCreate.join(',');
             };
         });
     </script>

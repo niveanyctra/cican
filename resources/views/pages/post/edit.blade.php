@@ -57,18 +57,18 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchUsersEdit');
-            const resultsContainer = document.createElement('div'); // Wadah hasil pencarian
-            searchInput.parentNode.appendChild(resultsContainer);
-            const selectedCollaboratorsDiv = document.getElementById('selectedCollaboratorsEdit');
-            const collaboratorsInput = document.getElementById('collaboratorsInputEdit');
-            let selectedUsers = collaboratorsInput.value.split(',').filter(id => id).map(Number); // Array untuk menyimpan ID collaborator yang dipilih
+            const searchInputEdit = document.getElementById('searchUsersEdit');
+            const resultsContainerEdit = document.createElement('div'); // Wadah hasil pencarian
+            searchInputEdit.parentNode.appendChild(resultsContainerEdit);
+            const selectedCollaboratorsDivEdit = document.getElementById('selectedCollaboratorsEdit');
+            const collaboratorsInputEdit = document.getElementById('collaboratorsInputEdit');
+            let selectedUsersEdit = collaboratorsInputEdit.value.split(',').filter(id => id).map(Number); // Array untuk menyimpan ID collaborator yang dipilih
 
-            searchInput.addEventListener('input', function() {
+            searchInputEdit.addEventListener('input', function() {
                 const query = this.value.trim();
 
                 if (query.length < 2) {
-                    resultsContainer.innerHTML = '';
+                    resultsContainerEdit.innerHTML = '';
                     return;
                 }
 
@@ -82,12 +82,12 @@
                         } else {
                             data.forEach(user => {
                                 // Jangan tampilkan user yang sudah dipilih atau user yang sedang login
-                                if (!selectedUsers.includes(user.id) && user.id !==
+                                if (!selectedUsersEdit.includes(user.id) && user.id !==
                                     {{ auth()->id() }}) {
                                     const avatar = user.avatar ? `/storage/${user.avatar}` :
                                         '{{ asset('default-image.jpg') }}';
                                     html += `
-                                <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer" onclick="selectUser(${user.id}, '${user.name}', '${user.username}')">
+                                <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer" onclick="selectUserEdit(${user.id}, '${user.name}', '${user.username}')">
                                     <div class="d-flex align-items-center">
                                         <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
                                         <div>
@@ -100,47 +100,47 @@
                                 }
                             });
                         }
-                        resultsContainer.innerHTML = html;
+                        resultsContainerEdit.innerHTML = html;
                     })
                     .catch(err => {
                         console.error('Error saat fetch:', err);
-                        resultsContainer.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
+                        resultsContainerEdit.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
                     });
             });
 
             // Fungsi untuk menangani pemilihan user
-            window.selectUser = function(userId, name, username) {
+            window.selectUserEdit = function(userId, name, username) {
                 // Tambahkan user ke array jika belum ada
-                if (!selectedUsers.includes(userId)) {
-                    selectedUsers.push(userId);
+                if (!selectedUsersEdit.includes(userId)) {
+                    selectedUsersEdit.push(userId);
 
                     // Tampilkan user yang dipilih
-                    const displayValue = `${name} (@${username})`;
-                    const collaboratorDiv = document.createElement('div');
-                    collaboratorDiv.className = 'd-flex align-items-center mb-2';
-                    collaboratorDiv.innerHTML = `
-                <span class="me-2">${displayValue}</span>
+                    const displayValueEdit = `${name} (@${username})`;
+                    const collaboratorDivEdit = document.createElement('div');
+                    collaboratorDivEdit.className = 'd-flex align-items-center mb-2';
+                    collaboratorDivEdit.innerHTML = `
+                <span class="me-2">${displayValueEdit}</span>
                 <button type="button" class="btn btn-sm btn-danger" onclick="removeUser(${userId})">Hapus</button>
             `;
-                    selectedCollaboratorsDiv.appendChild(collaboratorDiv);
+                    selectedCollaboratorsDivEdit.appendChild(collaboratorDivEdit);
 
                     // Perbarui nilai input hidden
-                    collaboratorsInput.value = selectedUsers.join(',');
+                    collaboratorsInputEdit.value = selectedUsersEdit.join(',');
 
                     // Kosongkan hasil pencarian
-                    resultsContainer.innerHTML = '';
-                    searchInput.value = ''; // Reset input pencarian
+                    resultsContainerEdit.innerHTML = '';
+                    searchInputEdit.value = ''; // Reset input pencarian
                 }
             };
 
             // Fungsi untuk menghapus user dari daftar
             window.removeUser = function(userId) {
                 // Hapus user dari array
-                selectedUsers = selectedUsers.filter(id => id !== userId);
+                selectedUsersEdit = selectedUsersEdit.filter(id => id !== userId);
 
                 // Hapus elemen DOM yang sesuai
-                const collaboratorDivs = selectedCollaboratorsDiv.querySelectorAll('div');
-                collaboratorDivs.forEach(div => {
+                const collaboratorDivsEdit = selectedCollaboratorsDivEdit.querySelectorAll('div');
+                collaboratorDivsEdit.forEach(div => {
                     const button = div.querySelector('button');
                     if (button && button.onclick.toString().includes(`removeUser(${userId})`)) {
                         div.remove();
@@ -148,7 +148,7 @@
                 });
 
                 // Perbarui nilai input hidden
-                collaboratorsInput.value = selectedUsers.join(',');
+                collaboratorsInputEdit.value = selectedUsersEdit.join(',');
             };
         });
     </script>

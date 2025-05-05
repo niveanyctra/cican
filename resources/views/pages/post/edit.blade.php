@@ -1,4 +1,62 @@
-@foreach ($posts as $post)
+@if (isset($posts))
+    @foreach ($posts as $post)
+        <div class="modal fade" id="editPostModal{{ $post->id }}" tabindex="-1" aria-labelledby="editPostModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPostModalLabel">Edit Postingan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="modal-body">
+                            <!-- Caption -->
+                            <div class="mb-3">
+                                <label for="caption{{ $post->id }}" class="form-label">Caption</label>
+                                <textarea name="caption" id="caption{{ $post->id }}" class="form-control @error('caption') is-invalid @enderror"
+                                    rows="3">{{ old('caption', $post->caption) }}</textarea>
+                                @error('caption')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Collaboration -->
+                            <div class="mb-3">
+                                <label for="searchUsersEdit" class="form-label">Cari Collaborators</label>
+                                <input type="text" id="searchUsersEdit" class="form-control"
+                                    placeholder="Cari nama atau username">
+
+                                <!-- Daftar Collaborators yang Dipilih -->
+                                <div id="selectedCollaboratorsEdit" class="mt-3">
+                                    @foreach ($post->collaborators as $collaborator)
+                                        <div class="d-flex align-items-center mb-2"
+                                            data-user-id="{{ $collaborator->id }}">
+                                            <span class="me-2">{{ $collaborator->name }}
+                                                {{ '@' . $collaborator->username }}</span>
+                                            <button type="button" class="btn btn-sm btn-danger"
+                                                onclick="removeUser({{ $collaborator->id }})">Hapus</button>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- Input Hidden untuk Menyimpan ID Collaborators -->
+                                <input type="hidden" name="collaborators" id="collaboratorsInputEdit"
+                                    value="{{ $post->collaborators->pluck('id')->join(',') }}">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
+@else
     <div class="modal fade" id="editPostModal{{ $post->id }}" tabindex="-1" aria-labelledby="editPostModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -40,7 +98,8 @@
                             </div>
 
                             <!-- Input Hidden untuk Menyimpan ID Collaborators -->
-                            <input type="hidden" name="collaborators" id="collaboratorsInputEdit" value="{{ $post->collaborators->pluck('id')->join(',') }}">
+                            <input type="hidden" name="collaborators" id="collaboratorsInputEdit"
+                                value="{{ $post->collaborators->pluck('id')->join(',') }}">
                         </div>
                     </div>
 
@@ -52,7 +111,7 @@
             </div>
         </div>
     </div>
-@endforeach
+@endif
 
 @push('scripts')
     <script>
@@ -62,7 +121,8 @@
             searchInputEdit.parentNode.appendChild(resultsContainerEdit);
             const selectedCollaboratorsDivEdit = document.getElementById('selectedCollaboratorsEdit');
             const collaboratorsInputEdit = document.getElementById('collaboratorsInputEdit');
-            let selectedUsersEdit = collaboratorsInputEdit.value.split(',').filter(id => id).map(Number); // Array untuk menyimpan ID collaborator yang dipilih
+            let selectedUsersEdit = collaboratorsInputEdit.value.split(',').filter(id => id).map(
+            Number); // Array untuk menyimpan ID collaborator yang dipilih
 
             searchInputEdit.addEventListener('input', function() {
                 const query = this.value.trim();
@@ -104,7 +164,8 @@
                     })
                     .catch(err => {
                         console.error('Error saat fetch:', err);
-                        resultsContainerEdit.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
+                        resultsContainerEdit.innerHTML =
+                        '<p class="text-danger">Gagal memuat data.</p>';
                     });
             });
 

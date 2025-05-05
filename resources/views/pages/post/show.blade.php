@@ -35,7 +35,7 @@
                     @if ($post->user_id == Auth::user()->id)
                         <div>
                             <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                                data-bs-target="#editPostModal">
+                                data-bs-target="#editPostModal{{ $post->id }}">
                                 Edit
                             </button>
                             <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger">Hapus</a>

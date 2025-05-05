@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+@include('pages.post.edit')
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
         <div class="col-8 ms-5">

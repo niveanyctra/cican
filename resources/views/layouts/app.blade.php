@@ -55,7 +55,6 @@
                 <!-- Modal -->
                 @include('pages.post.create')
                 @include('pages.search.search')
-                @include('pages.post.edit')
                 @if (isset($user))
                     @include('components.modal.follower')
                     @include('components.modal.following')

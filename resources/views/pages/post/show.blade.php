@@ -9,6 +9,7 @@
     </style>
 @endpush
 @section('content')
+@include('pages.post.edit')
     <div class="d-flex">
         <img src="{{ Storage::url($post->media->first()->file_url ?? asset('default-image.jpg')) }}" alt="Post Media"
             style="width: 550px">

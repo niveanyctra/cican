@@ -24,6 +24,7 @@ Route::get('/{username}', [AccountController::class, 'show'])->name('user.show')
 Route::middleware('auth')->group(function () {
     // Route yang memerlukan autentikasi
     Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('/mention/users', [CommentController::class, 'mention'])->name('mention.users');
 
     Route::controller(AccountController::class)->prefix('account')->name('account.')->group(function () {
         Route::get('/edit', 'edit')->name('edit');

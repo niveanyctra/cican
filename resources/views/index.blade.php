@@ -81,8 +81,10 @@
                     <!-- Form Komentar -->
                     <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                         @csrf
-                        <input class="form-control form-control-sm" type="text" name="body"
-                            placeholder="Komentar . . ." style="width: 500px">
+                        <textarea id="comment-input" name="body"
+                        class="form-control form-control-sm"
+                        placeholder="Komentar . . ." style="width: 500px" rows="2"></textarea>
+
                         <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                     </form>
 

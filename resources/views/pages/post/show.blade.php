@@ -52,18 +52,35 @@
             @foreach ($comments as $comment)
                 <p>
                     <a href="{{ route('user.show', $comment->user->username) }}"
-                        class="text-decoration-none text-dark fw-bold">{{ $comment->user->username }}</a>
-                    {{ $comment->body }}
+                        class="text-decoration-none text-dark fw-bold">
+                        {{ $comment->user->username }}
+                    </a>
+
+                    @php
+                        $parsed = preg_replace_callback(
+                            '/@([\w]+)/',
+                            function ($matches) {
+                                $username = e($matches[1]);
+                                $url = url("/profile/{$username}");
+                                return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
+                            },
+                            e($comment->body),
+                        );
+                    @endphp
+
+                    {!! $parsed !!}
+
                     <br>
-                    {{ $comment->created_at->diffForHumans() }}
+                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
                     @auth
-                        @if ($comment->user_id == Auth::user()->id)
+                        @if ($comment->user_id == Auth::id())
                             <a href="{{ route('comments.destroy', $comment->id) }}"
-                                class="text-decoration-none text-danger">Hapus</a>
+                                class="text-decoration-none text-danger ms-2">Hapus</a>
                         @endif
                     @endauth
                 </p>
             @endforeach
+
             <div class="bottom-post">
                 <div id="like-section-{{ $post->id }}" class="ms-2 my-2">
                     <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
@@ -78,8 +95,9 @@
                 </div>
                 <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                     @csrf
-                    <input class="form-control form-control-sm" type="text" name="body" placeholder="Komentar . . ."
-                        style="width: 400px">
+                    <textarea id="comment-input" class="form-control form-control-sm" name="body" placeholder="Komentar . . ."
+                        style="width: 400px; resize: none;" rows="1"></textarea>
+
                     <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                 </form>
             </div>

@@ -12,6 +12,9 @@
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/tributejs@5.1.3/dist/tribute.css">
+
     <style>
         /* .sidebar {
             position: fixed;
@@ -71,6 +74,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
+    <script src="https://unpkg.com/tributejs@5.1.3/dist/tribute.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({ key: user.username, value: user.username })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function (item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+            const commentInput = document.getElementById('comment-input');
+            tribute.attach(commentInput);
+        });
+        </script>
     @stack('scripts')
 </body>
 

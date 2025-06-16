@@ -9,10 +9,44 @@
     </style>
 @endpush
 @section('content')
-@include('pages.post.edit')
+    @include('pages.post.edit')
     <div class="d-flex">
-        <img src="{{ Storage::url($post->media->first()->file_url ?? asset('default-image.jpg')) }}" alt="Post Media"
-            style="width: 550px">
+        {{-- <img src="{{ Storage::url(path: $post->media->first()->file_url ?? asset('default-image.jpg')) }}" alt="Post Media"
+            style="width: 550px"> --}}
+        <!-- Media (Gambar/Video) -->
+        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach ($post->media as $index => $media)
+                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                        @if ($media->type === 'image')
+                            <!-- Gambar -->
+                            <img src="{{ Storage::url($media->file_url?? asset('default-image.jpg')) }}" alt="Post Media"
+                                class="d-block w-100 img-fluid" style="height: auto;">
+                        @elseif ($media->type === 'video')
+                            <!-- Video -->
+                            <video controls style="min-width: 550px; max-width: 550px;">
+                                <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
+                                Browser Anda tidak mendukung elemen video.
+                            </video>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Tombol Navigasi Carousel -->
+            @if ($post->media->count() > 1)
+                <button class="carousel-control-prev" type="button" data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            @endif
+        </div>
         <div class="container" style="margin-left: 50px">
             <div class="d-flex justify-content-between">
                 <p>

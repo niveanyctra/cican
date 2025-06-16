@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use FFMpeg\FFMpeg;
 
 class PostController extends Controller
 {
@@ -209,16 +210,33 @@ class PostController extends Controller
         return redirect()->route('home')->with('success', 'Post deleted successfully!');
     }
 
+
     private function generateThumbnail($file)
     {
         $tempPath = $file->getPathname();
         $thumbnailName = uniqid() . '.jpg';
         $thumbnailPath = 'thumbnails/' . $thumbnailName;
 
-        // Gunakan FFmpeg untuk membuat thumbnail
-        $command = "ffmpeg -i {$tempPath} -ss 00:00:01.000 -vframes 1 storage/app/public/{$thumbnailPath}";
-        exec($command);
+        // Pastikan folder thumbnails ada
+        if (!Storage::disk('public')->exists('thumbnails')) {
+            Storage::disk('public')->makeDirectory('thumbnails');
+        }
 
-        return $thumbnailPath;
+        try {
+            // Inisialisasi FFMpeg
+            $ffmpeg = FFMpeg::create();
+
+            // Buka file video
+            $video = $ffmpeg->open($tempPath);
+
+            // Buat thumbnail
+            $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(1))
+                ->save(storage_path('app/public/' . $thumbnailPath));
+
+            return $thumbnailPath;
+        } catch (\Exception $e) {
+            Log::error('Failed to generate thumbnail using PHP-FFMpeg: ' . $e->getMessage());
+            return null; // Kembalikan null jika gagal
+        }
     }
 }

@@ -2,6 +2,7 @@
 @section('content')
     @include('pages.post.edit')
     <div class="row">
+        mamamammaamamma
         <!-- Kolom Utama (Feed Postingan) -->
         <div class="col-8 ms-5">
             @foreach ($posts as $post)

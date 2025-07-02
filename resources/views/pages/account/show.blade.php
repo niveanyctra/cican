@@ -6,8 +6,8 @@
         <div class="d-flex align-items-start mb-4">
             <!-- Avatar -->
             <div class="me-4 profile">
-                <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar" class="rounded-circle"
-                    style="object-fit: cover; width: 70px; height: 70px;">
+                <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
+                    class="rounded-circle" style="object-fit: cover; width: 70px; height: 70px;">
             </div>
 
             <!-- Informasi Profil -->
@@ -52,16 +52,25 @@
                     <a href="{{ route('posts.show', $post->id) }}">
                         <div
                             style="width: 305px; height: 350px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
-                            <img src="{{ Storage::url($post->media->first()->file_url ?? asset('default-image.jpg')) }}"
-                                alt="Post Media" style="width: 100%; height: 100%; object-fit: cover;">
+                            @if ($post->media->isNotEmpty())
+                                @php
+                                    $firstMedia = $post->media->first();
+                                    $imageUrl =
+                                        $firstMedia->type === 'video' && $firstMedia->thumbnail_url
+                                            ? $firstMedia->thumbnail_url // Sudah termasuk /storage/
+                                            : Storage::url($firstMedia->file_url); // Tambahkan /storage/ jika belum ada
+                                @endphp
+                                <img src="{{ $imageUrl }}" alt="Post Media"
+                                    style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('default-image.jpg') }}" alt="Default Image"
+                                    style="width: 100%; height: 100%; object-fit: cover;">
+                            @endif
                         </div>
                     </a>
                 </div>
             @endforeach
         </div>
-    </div>
-
-
     </div>
 @endsection
 

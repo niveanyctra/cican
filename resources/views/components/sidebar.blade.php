@@ -1,17 +1,37 @@
 <aside class="w-64 bg-white shadow-lg p-6 fixed h-screen">
     <div class="flex items-center justify-center mb-8">
-        <h1 class="text-2xl font-bold text-gray-800">Cican</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Narsee</h1>
     </div>
     <nav>
         <ul class="space-y-4">
             <li>
-                <a href="/" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900">
+                <a href="{{ route('home') }}" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h5m4 0h5a1 1 0 001-1V10" />
                     </svg>
                     <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('textee') }}" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h5m4 0h5a1 1 0 001-1V10" />
+                    </svg>
+                    <span>Textee</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('snapee') }}" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h5m4 0h5a1 1 0 001-1V10" />
+                    </svg>
+                    <span>Snapee</span>
                 </a>
             </li>
             <li>
@@ -25,7 +45,7 @@
                     <span>Search</span>
             </li>
             {{-- @include('pages.search.search') --}}
-            <li>
+            {{-- <li>
                 <a href="/notifications" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -34,7 +54,7 @@
                     </svg>
                     <span>Notifications</span>
                 </a>
-            </li>
+            </li> --}}
             <li>
                 <button type="button" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900 w-full"
                     data-bs-toggle="modal" data-bs-target="#createPostModal">

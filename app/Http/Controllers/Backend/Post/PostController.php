@@ -8,10 +8,13 @@ use App\Models\Media;
 use App\Helpers\TagHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Collaboration;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use FFMpeg\FFMpeg;
 
 class PostController extends Controller
 {
@@ -41,15 +44,13 @@ class PostController extends Controller
             'caption' => 'nullable|string|max:2000', // Caption opsional, maks 2000 karakter
             'media.*' => 'required|array|min:1|max:5', // Minimal 1, maksimal 5 file
             'media.*' => 'file|mimes:jpeg,png,jpg,mp4|max:20480', // Maks 20MB per file
-            'collaborators' => 'nullable|array', // Kolaborator opsional
-            'location' => 'nullable|string|max:255', // Lokasi opsional
+            'collaborators' => 'nullable|string', // Kolaborator opsional
         ]);
 
         // Simpan data post
         $post = Post::create([
             'user_id' => Auth::user()->id,
             'caption' => $request->caption,
-            'location' => $request->location,
         ]);
 
         // Simpan media (gambar/video)
@@ -78,9 +79,15 @@ class PostController extends Controller
         $mentionedUsers = TagHelper::extractMentions($request->caption);
         $post->taggedUsers()->attach($mentionedUsers);
 
-        // Simpan kolaborator (jika ada)
+        // Simpan collaborators
         if ($request->collaborators) {
-            $post->collaborators()->attach($request->collaborators);
+            $collaboratorIds = explode(',', $request->collaborators);
+            foreach ($collaboratorIds as $userId) {
+                Collaboration::create([
+                    'post_id' => $post->id,
+                    'user_id' => $userId,
+                ]);
+            }
         }
 
         // Kirim notifikasi ke pengguna yang ditag
@@ -124,7 +131,7 @@ class PostController extends Controller
             'caption' => 'nullable|string|max:2000', // Caption opsional, maks 2000 karakter
             'media.*' => 'nullable|array|min:0|max:5', // Minimal 0, maksimal 5 file baru
             'media.*' => 'nullable|file|mimes:jpeg,png,jpg,mp4|max:20480', // Maks 20MB per file
-            'collaborators' => 'nullable|array', // Kolaborator opsional
+            'collaborators' => 'nullable|string', // Kolaborator opsional
         ]);
 
         $post = Post::findOrFail($id);
@@ -168,9 +175,12 @@ class PostController extends Controller
         $mentionedUsers = TagHelper::extractMentions($request->caption);
         $post->taggedUsers()->sync($mentionedUsers); // Sync untuk mengganti tag lama dengan yang baru
 
-        // Perbarui kolaborator (jika ada)
-        if ($request->collaborators) {
-            $post->collaborators()->sync($request->collaborators); // Sync untuk mengganti kolaborator lama
+        // Simpan collaborators
+        if ($request->has('collaborators')) {
+            $collaboratorIds = array_filter(explode(',', $request->collaborators)); // Pisahkan ID dan hapus nilai kosong
+            $post->collaborators()->sync($collaboratorIds); // Sinkronisasi kolaborator
+        } else {
+            $post->collaborators()->detach(); // Hapus semua kolaborator jika tidak ada yang dipilih
         }
 
         return redirect()->back()->with('success', 'Post updated successfully!');
@@ -200,16 +210,33 @@ class PostController extends Controller
         return redirect()->route('home')->with('success', 'Post deleted successfully!');
     }
 
+
     private function generateThumbnail($file)
     {
         $tempPath = $file->getPathname();
         $thumbnailName = uniqid() . '.jpg';
         $thumbnailPath = 'thumbnails/' . $thumbnailName;
 
-        // Gunakan FFmpeg untuk membuat thumbnail
-        $command = "ffmpeg -i {$tempPath} -ss 00:00:01.000 -vframes 1 storage/app/public/{$thumbnailPath}";
-        exec($command);
+        // Pastikan folder thumbnails ada
+        if (!Storage::disk('public')->exists('thumbnails')) {
+            Storage::disk('public')->makeDirectory('thumbnails');
+        }
 
-        return $thumbnailPath;
+        try {
+            // Inisialisasi FFMpeg
+            $ffmpeg = FFMpeg::create();
+
+            // Buka file video
+            $video = $ffmpeg->open($tempPath);
+
+            // Buat thumbnail
+            $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(1))
+                ->save(storage_path('app/public/' . $thumbnailPath));
+
+            return $thumbnailPath;
+        } catch (\Exception $e) {
+            Log::error('Failed to generate thumbnail using PHP-FFMpeg: ' . $e->getMessage());
+            return null; // Kembalikan null jika gagal
+        }
     }
 }

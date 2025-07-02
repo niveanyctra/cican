@@ -17,7 +17,7 @@ class Post extends Model
 
     public function media()
     {
-        return $this->hasMany(Media::class);
+        return $this->hasMany(Media::class)->orderBy('order');
     }
 
     public function likes()

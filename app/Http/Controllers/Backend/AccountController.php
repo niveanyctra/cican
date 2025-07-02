@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,9 +45,20 @@ class AccountController extends Controller
         // Cari pengguna berdasarkan username
         $user = User::where('username', $username)->firstOrFail();
 
-        // Ambil semua postingan pengguna, diurutkan berdasarkan waktu pembuatan (terbaru)
-        $posts = Post::with(['media']) // Eager load relasi media
-            ->where('user_id', $user->id)
+        // Ambil ID postingan milik pengguna dan postingan kolaborasi
+        $postIds = DB::table('posts')
+            ->where('user_id', $user->id) // Postingan milik pengguna
+            ->orWhereExists(function ($query) use ($user) {
+                $query->select(DB::raw(1))
+                    ->from('collaborations')
+                    ->whereColumn('collaborations.post_id', 'posts.id')
+                    ->where('collaborations.user_id', $user->id); // Postingan kolaborasi
+            })
+            ->pluck('id');
+
+        // Ambil postingan berdasarkan ID yang ditemukan
+        $posts = Post::with(['media', 'likes', 'comments'])
+            ->whereIn('id', $postIds)
             ->orderBy('created_at', 'desc')
             ->get();
 

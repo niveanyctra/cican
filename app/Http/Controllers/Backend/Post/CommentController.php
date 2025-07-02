@@ -29,19 +29,19 @@ class CommentController extends Controller
         ]);
 
         // Simpan tag pengguna di komentar
-        $mentionedUsers = TagHelper::extractMentions($request->body);
-        $comment->taggedUsers()->attach($mentionedUsers);
+        // $mentionedUsers = TagHelper::extractMentions($request->body);
+        // $comment->taggedUsers()->attach($mentionedUsers);
 
-        // Kirim notifikasi ke pemilik postingan jika komentator bukan pemilik
-        if ($post->user_id !== Auth::id()) {
-            $post->user->notify(new \App\Notifications\CommentNotification($comment));
-        }
+        // // Kirim notifikasi ke pemilik postingan jika komentator bukan pemilik
+        // if ($post->user_id !== Auth::id()) {
+        //     $post->user->notify(new \App\Notifications\CommentNotification($comment));
+        // }
 
-        // Kirim notifikasi ke pengguna yang ditag
-        foreach ($mentionedUsers as $userId) {
-            $user = User::find($userId);
-            $user->notify(new \App\Notifications\TaggedInCommentNotification($comment));
-        }
+        // // Kirim notifikasi ke pengguna yang ditag
+        // foreach ($mentionedUsers as $userId) {
+        //     $user = User::find($userId);
+        //     $user->notify(new \App\Notifications\TaggedInCommentNotification($comment));
+        // }
 
         return back();
         // return response()->json([
@@ -67,4 +67,15 @@ class CommentController extends Controller
         //     'message' => 'Comment deleted successfully.',
         // ]);
     }
+    public function mention(Request $request)
+    {
+        $query = $request->query('query');
+
+        $users = User::where('username', 'like', "%{$query}%")
+            ->limit(5)
+            ->get(['username']);
+
+        return response()->json($users);
+    }
+
 }

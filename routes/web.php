@@ -18,12 +18,12 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('register', [AccountController::class, 'create'])->name('register');
 Route::post('buat-akun', [AccountController::class, 'store'])->name('register.process');
 
-// Profil Pengguna
-Route::get('/{username}', [AccountController::class, 'show'])->name('user.show');
-
 Route::middleware('auth')->group(function () {
     // Route yang memerlukan autentikasi
     Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('/textee', [HomeController::class, 'textee'])->name('textee');
+    Route::get('/snapee', [HomeController::class, 'snapee'])->name('snapee');
+    Route::get('/mention/users', [CommentController::class, 'mention'])->name('mention.users');
 
     Route::controller(AccountController::class)->prefix('account')->name('account.')->group(function () {
         Route::get('/edit', 'edit')->name('edit');
@@ -66,5 +66,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/follow/{user}', 'follow')->name('follow');
         Route::post('/unfollow/{user}', 'unfollow')->name('unfollow');
     });
-
 });
+// Profil Pengguna
+Route::get('/{username}', [AccountController::class, 'show'])->name('user.show');

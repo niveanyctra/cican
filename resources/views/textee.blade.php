@@ -57,88 +57,27 @@
                         @endif
                     </div>
 
-                    @if ($post->media->isNotEmpty())
-                        <!-- Media (Gambar/Video) -->
+                    <!-- Caption -->
+                    <a href="{{ route('posts.show', $post->id) }}">
+                        <p class="mt-2">
+                            {{ $post->caption }}
+                        </p>
+                    </a>
+
+                    <!-- Like dan Komentar -->
+                    <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
+                        <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
+                            <!-- Ikon Like -->
+                            <i id="like-icon-{{ $post->id }}"
+                                class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
+                        </button>
+                        <!-- Jumlah Like -->
+                        <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> likes
                         <a href="{{ route('posts.show', $post->id) }}">
-                            <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
-                                <div class="carousel-inner">
-                                    @foreach ($post->media as $index => $media)
-                                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                            @if ($media->type === 'image')
-                                                <!-- Gambar -->
-                                                <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
-                                                    class="d-block w-100 img-fluid">
-                                            @elseif ($media->type === 'video')
-                                                <!-- Video -->
-                                                <video controls class="d-block w-100 img-fluid" style="height: auto;">
-                                                    <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
-                                                    Browser Anda tidak mendukung elemen video.
-                                                </video>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <!-- Tombol Navigasi Carousel -->
-                                @if ($post->media->count() > 1)
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
-                                @endif
-                            </div>
+                            <i class="fa-regular fa-comment fa-xl ms-2"></i>
+                            <span>{{ $post->comments->count() }} comments</span>
                         </a>
-
-                        <!-- Like dan Komentar -->
-                        <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
-                            <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
-                                <!-- Ikon Like -->
-                                <i id="like-icon-{{ $post->id }}"
-                                    class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                            </button>
-                            <!-- Jumlah Like -->
-                            <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> likes
-                            <a href="{{ route('posts.show', $post->id) }}">
-                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                <span>{{ $post->comments->count() }} comments</span>
-                            </a>
-                        </div>
-
-                        <!-- Caption -->
-                        <a href="{{ route('posts.show', $post->id) }}">
-                            <p class="mt-2">
-                                {{ $post->caption }}
-                            </p>
-                        </a>
-                    @else
-                        <!-- Caption -->
-                        <a href="{{ route('posts.show', $post->id) }}">
-                            <p class="mt-2">
-                                {{ $post->caption }}
-                            </p>
-                        </a>
-
-                        <!-- Like dan Komentar -->
-                        <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
-                            <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
-                                <!-- Ikon Like -->
-                                <i id="like-icon-{{ $post->id }}"
-                                    class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                            </button>
-                            <!-- Jumlah Like -->
-                            <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> likes
-                            <a href="{{ route('posts.show', $post->id) }}">
-                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                <span>{{ $post->comments->count() }} comments</span>
-                            </a>
-                        </div>
-                    @endif
+                    </div>
 
                     <!-- Form Komentar -->
                     <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">

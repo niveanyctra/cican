@@ -1,10 +1,12 @@
 @extends('layouts.app')
 @push('styles')
     <style>
-        .bottom-post {
-            position: fixed;
-            bottom: 0;
-            margin-bottom: 20px;
+        .carousel-inner {
+            height: 90vh;
+            /* Tetapkan tinggi container */
+            min-height: 500px;
+            /* Tinggi minimum untuk mobile */
+            width: 500px
         }
     </style>
 @endpush
@@ -12,21 +14,34 @@
     @include('pages.post.edit')
     <div class="d-flex">
         <!-- Media (Gambar/Video) -->
-        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide">
-            <div class="carousel-inner">
+        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
+            <div class="carousel-inner items-center" style="background: black">
+                <!-- Indikator Carousel -->
+                @if ($post->media->count() > 1)
+                    <div class="carousel-indicators">
+                        @foreach ($post->media as $index => $media)
+                            <button type="button" data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                                data-bs-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}"
+                                aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                                aria-label="Slide {{ $index + 1 }}"></button>
+                        @endforeach
+                    </div>
+                @endif
+
+                <!-- Item Media -->
                 @foreach ($post->media as $index => $media)
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                        @if ($media->type === 'image')
-                            <!-- Gambar -->
-                            <img src="{{ Storage::url($media->file_url ?? asset('default-image.jpg')) }}" alt="Post Media"
-                                style="max-width: 550px; max-height: 90vh;">
-                        @elseif ($media->type === 'video')
-                            <!-- Video -->
-                            <video controls style="max-width: 550px; max-height: 90vh;">
-                                <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
-                                Browser Anda tidak mendukung elemen video.
-                            </video>
-                        @endif
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            @if ($media->type === 'image')
+                                <img src="{{ Storage::url($media->file_url) }}" alt="Post Image" class="img-fluid"
+                                    style="max-height: 90vh; width: 100%; object-fit: contain;">
+                            @elseif ($media->type === 'video')
+                                <video controls class="w-100" style="max-height: 90vh; object-fit: contain;">
+                                    <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
+                                    Browser Anda tidak mendukung elemen video.
+                                </video>
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -38,8 +53,8 @@
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#postMediaCarousel-{{ $post->id }}"
-                    data-bs-slide="next">
+                <button class="carousel-control-next" type="button"
+                    data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
@@ -47,8 +62,9 @@
         </div>
 
         <!-- Informasi Post -->
-        <div class="container" style="margin-left: 50px">
-            <div class="d-flex justify-content-between">
+        <div class="container d-flex flex-column" style="margin-left: 50px; max-height: 90vh;">
+            <!-- Header Post -->
+            <div class="d-flex justify-content-between flex-shrink-0">
                 <p>
                     <a href="{{ route('user.show', $post->user->username) }}"
                         class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
@@ -79,44 +95,55 @@
                 @endauth
             </div>
             <hr class="my-3">
-            <p>
-                {{ $post->caption }} <br> <br>
-            </p>
-            <hr class="my-3">
-            @foreach ($comments as $comment)
-                <p>
-                    <a href="{{ route('user.show', $comment->user->username) }}"
-                        class="text-decoration-none text-dark fw-bold">
-                        {{ $comment->user->username }}
-                    </a>
 
-                    @php
-                        $parsed = preg_replace_callback(
-                            '/@([\w]+)/',
-                            function ($matches) {
-                                $username = e($matches[1]);
-                                $url = url("/profile/{$username}");
-                                return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
-                            },
-                            e($comment->body),
-                        );
-                    @endphp
+            <!-- Scrollable Content Area -->
+            <div class="flex-grow-1 overflow-auto" style="min-height: 0;">
+                <!-- Caption -->
+                <div class="mb-3">
+                    <p>{{ $post->caption }}</p>
+                </div>
+                <hr class="my-3">
 
-                    {!! $parsed !!}
+                <!-- Comments -->
+                <div class="comments-section">
+                    @foreach ($comments as $comment)
+                        <div class="mb-3">
+                            <p class="mb-1">
+                                <a href="{{ route('user.show', $comment->user->username) }}"
+                                    class="text-decoration-none text-dark fw-bold">
+                                    {{ $comment->user->username }}
+                                </a>
 
-                    <br>
-                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                    @auth
-                        @if ($comment->user_id == Auth::id())
-                            <a href="{{ route('comments.destroy', $comment->id) }}"
-                                class="text-decoration-none text-danger ms-2">Hapus</a>
-                        @endif
-                    @endauth
-                </p>
-            @endforeach
+                                @php
+                                    $parsed = preg_replace_callback(
+                                        '/@([\w]+)/',
+                                        function ($matches) {
+                                            $username = e($matches[1]);
+                                            $url = url("/profile/{$username}");
+                                            return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
+                                        },
+                                        e($comment->body),
+                                    );
+                                @endphp
 
-            <div class="bottom-post">
-                <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
+                                {!! $parsed !!}
+                            </p>
+                            <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                            @auth
+                                @if ($comment->user_id == Auth::id())
+                                    <a href="{{ route('comments.destroy', $comment->id) }}"
+                                        class="text-decoration-none text-danger ms-2">Hapus</a>
+                                @endif
+                            @endauth
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Fixed Bottom Section -->
+            <div class="bottom-post flex-shrink-0 pt-3" style="border-top: 1px solid #dee2e6;">
+                <!-- Like Section -->
+                <div id="like-section-{{ $post->id }}" class="my-2">
                     <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
                         <!-- Ikon Like -->
                         <i id="like-icon-{{ $post->id }}"
@@ -129,11 +156,12 @@
                         <span>{{ $post->comments->count() }} comments</span>
                     </a>
                 </div>
+
+                <!-- Comment Form -->
                 <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                     @csrf
-                    <textarea id="comment-input" class="form-control form-control-sm" name="body" placeholder="Komentar . . ."
-                        style="width: 400px; resize: none;" rows="1"></textarea>
-
+                    <input type="text" id="comment-input" class="form-control form-control-sm" name="body"
+                        placeholder="Komentar . . ." style="width: 100%; resize: none;">
                     <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                 </form>
             </div>

@@ -1,5 +1,14 @@
 @extends('layouts.app')
-
+@push('styles')
+    <style>
+        @media (max-width: 768px) {
+            .col-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+@endpush
 @section('content')
     <div class="container px-40">
         <!-- Header Profil -->
@@ -45,36 +54,163 @@
         </div>
 
         <hr class="my-3">
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-4 justify-between" id="profileTab" role="tablist">
+            <li class="nav-item w-50" role="presentation">
+                <button class="nav-link active w-100" id="snapee-tab" data-bs-toggle="tab" data-bs-target="#snapee"
+                    type="button" role="tab" aria-controls="snapee" aria-selected="true">
+                    Snapee
+                </button>
+            </li>
+            <li class="nav-item w-50" role="presentation">
+                <button class="nav-link w-100" id="textee-tab" data-bs-toggle="tab" data-bs-target="#textee" type="button"
+                    role="tab" aria-controls="textee" aria-selected="false">
+                    Textee
+                </button>
+            </li>
+        </ul>
 
-        <div class="row gap-0">
-            @foreach ($posts as $post)
-                <div class="col-4">
-                    <a href="{{ route('posts.show', $post->id) }}">
-                        <div
-                            style="width: 305px; height: 350px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
-                            @if ($post->media->isNotEmpty())
-                                @php
-                                    $firstMedia = $post->media->first();
-                                    $imageUrl =
-                                        $firstMedia->type === 'video' && $firstMedia->thumbnail_url
-                                            ? $firstMedia->thumbnail_url // Sudah termasuk /storage/
-                                            : Storage::url($firstMedia->file_url); // Tambahkan /storage/ jika belum ada
-                                @endphp
-                                <img src="{{ $imageUrl }}" alt="Post Media"
-                                    style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                <img src="{{ asset('default-image.jpg') }}" alt="Default Image"
-                                    style="width: 100%; height: 100%; object-fit: cover;">
-                            @endif
-                        </div>
-                    </a>
+        <!-- Tab Content -->
+        <div class="tab-content" id="profileTabContent">
+            <!-- Snapee Tab -->
+            <div class="tab-pane fade show active" id="snapee" role="tabpanel" aria-labelledby="snapee-tab">
+                <div class="row gap-0">
+                    @foreach ($posts as $post)
+                        @if ($post->media->isNotEmpty())
+                            <div class="col-4 p-0">
+                                <a href="{{ route('posts.show', $post->id) }}" class="d-block h-100">
+                                    <div class="position-relative h-100" style="min-height: 350px; max-height: 350px;">
+                                        @php
+                                            $firstMedia = $post->media->first();
+                                            $imageUrl =
+                                                $firstMedia->type === 'video' && $firstMedia->thumbnail_url
+                                                    ? $firstMedia->thumbnail_url
+                                                    : Storage::url($firstMedia->file_url);
+                                        @endphp
+
+                                        <img src="{{ $imageUrl }}" alt="Post Media" class="img-fluid w-100 h-100"
+                                            style="object-fit: cover;">
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
-            @endforeach
+            </div>
+
+            <!-- Textee Tab -->
+            <div class="tab-pane fade" id="textee" role="tabpanel" aria-labelledby="textee-tab">
+                <div class="d-flex flex-column gap-3">
+                    @foreach ($posts as $post)
+                        @if ($post->media->isEmpty())
+                            <div class="card border-0">
+                                <div class="card-body">
+                                    <!-- Profil dan Caption -->
+                                    <div class="gap-2">
+                                        <!-- Avatar dan Username -->
+                                        <div class="d-flex align-items-center profile">
+                                            <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}"
+                                                alt="Avatar" style="object-fit: cover; width: 40px; height: 40px;"
+                                                class="rounded-circle me-2">
+                                            <a href="{{ route('user.show', $post->user->username) }}"
+                                                class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
+
+                                            <!-- Tampilkan Collaborator -->
+                                            @if ($post->collaborators->count() > 0)
+                                                <span class="mx-1">&</span>
+                                                <a href="{{ route('user.show', $post->collaborators->first()->username) }}"
+                                                    class="text-decoration-none text-dark fw-bold">{{ $post->collaborators->first()->username }}</a>
+                                                @if ($post->collaborators->count() > 1)
+                                                    <span
+                                                        class="text-muted">+{{ $post->collaborators->count() - 1 }}</span>
+                                                @endif
+                                            @endif
+
+                                            <span class="mx-1">•</span>
+                                            <span class="text-muted">{{ $post->created_at->diffForHumans() }}</span>
+
+                                            <!-- Menu Titik Tiga untuk Edit/Hapus -->
+                                            @if ($post->user_id === auth()->id())
+                                                <div class="dropdown ms-auto">
+                                                    <button class="btn btn-link p-0" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <button type="button" class="dropdown-item"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editPostModal{{ $post->id }}">
+                                                                Edit
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <form action="{{ route('posts.destroy', $post->id) }}"
+                                                                method="GET">
+                                                                @csrf
+                                                                <button type="submit"
+                                                                    class="dropdown-item text-danger">Hapus</button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <!-- Caption -->
+                                        <a href="{{ route('posts.show', $post->id) }}">
+                                            <p class="mt-2">
+                                                {{ $post->caption }}
+                                            </p>
+                                        </a>
+
+                                        <!-- Like dan Komentar -->
+                                        <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
+                                            <button id="like-button-{{ $post->id }}"
+                                                onclick="toggleLike({{ $post->id }})">
+                                                <!-- Ikon Like -->
+                                                <i id="like-icon-{{ $post->id }}"
+                                                    class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
+                                            </button>
+                                            <!-- Jumlah Like -->
+                                            <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                            likes
+                                            <a href="{{ route('posts.show', $post->id) }}">
+                                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
+                                                <span>{{ $post->comments->count() }} comments</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
         </div>
+
     </div>
 @endsection
 
 @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const snapeeBtn = document.getElementById('snapee-tab');
+            const texteeBtn = document.getElementById('textee-tab');
+            const snapeeContent = document.getElementById('snapee');
+            const texteeContent = document.getElementById('textee');
+
+            snapeeBtn.addEventListener('click', () => {
+                snapeeContent.classList.add('show', 'active');
+                texteeContent.classList.remove('show', 'active');
+            });
+
+            texteeBtn.addEventListener('click', () => {
+                texteeContent.classList.add('show', 'active');
+                snapeeContent.classList.remove('show', 'active');
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.addEventListener('click', function(e) {

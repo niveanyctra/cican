@@ -11,20 +11,18 @@
 @section('content')
     @include('pages.post.edit')
     <div class="d-flex">
-        {{-- <img src="{{ Storage::url(path: $post->media->first()->file_url ?? asset('default-image.jpg')) }}" alt="Post Media"
-            style="width: 550px"> --}}
         <!-- Media (Gambar/Video) -->
-        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide" data-bs-ride="carousel">
+        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide">
             <div class="carousel-inner">
                 @foreach ($post->media as $index => $media)
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                         @if ($media->type === 'image')
                             <!-- Gambar -->
-                            <img src="{{ Storage::url($media->file_url?? asset('default-image.jpg')) }}" alt="Post Media"
-                                class="d-block w-100 img-fluid" style="height: auto;">
+                            <img src="{{ Storage::url($media->file_url ?? asset('default-image.jpg')) }}" alt="Post Media"
+                                style="max-width: 550px; max-height: 90vh;">
                         @elseif ($media->type === 'video')
                             <!-- Video -->
-                            <video controls style="min-width: 550px; max-width: 550px;">
+                            <video controls style="max-width: 550px; max-height: 90vh;">
                                 <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
                                 Browser Anda tidak mendukung elemen video.
                             </video>
@@ -47,6 +45,8 @@
                 </button>
             @endif
         </div>
+
+        <!-- Informasi Post -->
         <div class="container" style="margin-left: 50px">
             <div class="d-flex justify-content-between">
                 <p>
@@ -116,7 +116,7 @@
             @endforeach
 
             <div class="bottom-post">
-                <div id="like-section-{{ $post->id }}" class="ms-2 my-2">
+                <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
                     <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
                         <!-- Ikon Like -->
                         <i id="like-icon-{{ $post->id }}"
@@ -124,8 +124,10 @@
                     </button>
                     <!-- Jumlah Like -->
                     <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> likes
-                    <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                    <span>{{ $post->comments->count() }} comments</span>
+                    <a href="{{ route('posts.show', $post->id) }}">
+                        <i class="fa-regular fa-comment fa-xl ms-2"></i>
+                        <span>{{ $post->comments->count() }} comments</span>
+                    </a>
                 </div>
                 <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                     @csrf

@@ -4,6 +4,11 @@
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
         <div class="col-8 ms-5">
+            <div class="mb-3 px-32 w-100">
+                <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
+                    <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off" style="border-radius: 10px">
+                </div>
+            </div>
             @foreach ($posts as $post)
                 <div class="mb-3 px-32">
                     <!-- Avatar dan Username -->
@@ -53,8 +58,7 @@
 
                     <!-- Media (Gambar/Video) -->
                     <a href="{{ route('posts.show', $post->id) }}">
-                        <!-- Media (Gambar/Video) -->
-                        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide" data-bs-ride="carousel">
+                        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
                             <div class="carousel-inner">
                                 @foreach ($post->media as $index => $media)
                                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
@@ -151,52 +155,3 @@
     </div>
     @stack('modal')
 @endsection
-
-@push('scripts')
-    <script>
-        function toggleLike(postId) {
-            const button = document.getElementById(`like-button-${postId}`);
-            const icon = document.getElementById(`like-icon-${postId}`);
-            const countElement = document.getElementById(`like-count-${postId}`);
-
-            // Tentukan apakah pengguna sudah menyukai postingan
-            const isLiked = icon.classList.contains('fa-solid');
-
-            // Tentukan URL dan method
-            const url = `/posts/${postId}/like`;
-            const method = isLiked ? 'DELETE' : 'POST';
-
-            fetch(url, {
-                    method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        // Update ikon like
-                        if (isLiked) {
-                            // Jika sebelumnya disukai, ubah ke tidak disukai
-                            icon.classList.remove('fa-solid', 'text-danger');
-                            icon.classList.add('fa-regular');
-                        } else {
-                            // Jika sebelumnya tidak disukai, ubah ke disukai
-                            icon.classList.remove('fa-regular');
-                            icon.classList.add('fa-solid', 'text-danger');
-                        }
-
-                        // Update jumlah like
-                        countElement.textContent = data.likeCount;
-
-                        // Tampilkan pesan sukses (opsional)
-                        console.log(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
-@endpush

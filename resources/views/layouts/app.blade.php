@@ -16,31 +16,6 @@
     <link rel="stylesheet" href="https://unpkg.com/tributejs@5.1.3/dist/tribute.css">
 
     <style>
-        /* .sidebar {
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 270px;
-            height: 100%;
-            border-right: 3px solid;
-            padding: 50px 0 0 30px;
-        }
-
-        .sidebar nav {
-            margin-top: 30px;
-        }
-
-        .sidebar nav li a {
-            text-decoration: none;
-            color: black;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        main {
-            margin: 50px 50px 0 350px;
-        } */
         .profile img{
             max-width: 150px;
             height: 150px;
@@ -75,6 +50,52 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <script src="https://unpkg.com/tributejs@5.1.3/dist/tribute.js"></script>
+    <script>
+        function toggleLike(postId) {
+            const button = document.getElementById(`like-button-${postId}`);
+            const icon = document.getElementById(`like-icon-${postId}`);
+            const countElement = document.getElementById(`like-count-${postId}`);
+
+            // Tentukan apakah pengguna sudah menyukai postingan
+            const isLiked = icon.classList.contains('fa-solid');
+
+            // Tentukan URL dan method
+            const url = `/posts/${postId}/like`;
+            const method = isLiked ? 'DELETE' : 'POST';
+
+            fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        // Update ikon like
+                        if (isLiked) {
+                            // Jika sebelumnya disukai, ubah ke tidak disukai
+                            icon.classList.remove('fa-solid', 'text-danger');
+                            icon.classList.add('fa-regular');
+                        } else {
+                            // Jika sebelumnya tidak disukai, ubah ke disukai
+                            icon.classList.remove('fa-regular');
+                            icon.classList.add('fa-solid', 'text-danger');
+                        }
+
+                        // Update jumlah like
+                        countElement.textContent = data.likeCount;
+
+                        // Tampilkan pesan sukses (opsional)
+                        console.log(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const tribute = new Tribute({

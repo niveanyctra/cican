@@ -55,7 +55,7 @@
                 @csrf
                 <h1>Registration</h1>
                 <div class="input-box">
-                    <input type="text" name="username" id="username"
+                    <input type="text" name="username" id="register-username"
                         class="form-control @error('username') is-invalid @enderror" placeholder="Masukkan username"
                         value="{{ old('username') }}" required>
                     @error('username')
@@ -64,7 +64,7 @@
                     <i class="bx bxs-user"></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" name="password" id="password"
+                    <input type="password" name="password" id="register-password"
                         class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password"
                         required>
                     @error('password')
@@ -73,16 +73,16 @@
                     <i class="bx bxs-lock-alt"></i>
                 </div>
                 <div class="input-box">
-                    <input type="email" name="email" id="email"
+                    <input type="email" name="email" id="register-email"
                         class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan email"
                         value="{{ old('email') }}" required>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    <i class="bx bxs-user"></i>
+                    <i class="bx bxs-envelope"></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" name="name" id="name"
+                    <input type="text" name="name" id="register-name"
                         class="form-control @error('name') is-invalid @enderror" placeholder="Masukkan nama lengkap"
                         value="{{ old('name') }}" required>
                     @error('name')
@@ -90,16 +90,7 @@
                     @enderror
                     <i class="bx bxs-user"></i>
                 </div>
-                {{-- <div class="input-box">
-                    <input type="email" placeholder="Email" required />
-                    <i class="bx bxs-envelope"></i>
-                </div> --}}
                 <button type="submit" class="btn">Register</button>
-                {{-- <p>or register with social platforms</p>
-                <div class="social-icons">
-                    <a href="#"><i class="bx bxl-google"></i></a>
-                    <a href="#"><i class="bx bxl-facebook"></i></a>
-                </div> --}}
             </form>
         </div>
 
@@ -107,7 +98,7 @@
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
                 <h1>Hello, Welcome!</h1>
-                <p>Don't have an account?</p>
+                <p>Don't have an account yet?</p>
                 <button class="btn register-btn">Register</button>
             </div>
             <div class="toggle-panel toggle-right">

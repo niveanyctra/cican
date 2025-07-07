@@ -56,7 +56,7 @@
                                             </div>
                                         @endforeach
                                     </div>
-
+                                    
                                     <!-- Tombol Navigasi Carousel -->
                                     @if ($post->media->count() > 1)
                                         <button class="carousel-control-prev" type="button"

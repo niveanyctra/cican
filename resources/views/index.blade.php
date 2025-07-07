@@ -146,14 +146,38 @@
                         <!-- Caption -->
                         <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
                             <p class="mt-2">
-                                {{ $post->caption }}
+                                @php
+                                    $parsed1 = preg_replace_callback(
+                                        '/@([\w]+)/',
+                                        function ($matches1) {
+                                            $username1 = e($matches1[1]);
+                                            $url1 = url("/{$username1}");
+                                            return "<span class=\"text-primary\">@{$username1}</span>";
+                                        },
+                                        $post->caption,
+                                    );
+                                @endphp
+
+                                {!! $parsed1 !!}
                             </p>
                         </div>
                     @else
                         <!-- Caption -->
                         <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
                             <p class="mt-2">
-                                {{ $post->caption }}
+                                @php
+                                    $parsed1 = preg_replace_callback(
+                                        '/@([\w]+)/',
+                                        function ($matches1) {
+                                            $username1 = e($matches1[1]);
+                                            $url1 = url("/{$username1}");
+                                            return "<span class=\"text-primary\">@{$username1}</span>";
+                                        },
+                                        $post->caption,
+                                    );
+                                @endphp
+
+                                {!! $parsed1 !!}
                             </p>
                         </div>
 

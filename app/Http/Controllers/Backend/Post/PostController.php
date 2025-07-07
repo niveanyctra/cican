@@ -91,10 +91,10 @@ class PostController extends Controller
         }
 
         // Kirim notifikasi ke pengguna yang ditag
-        foreach ($mentionedUsers as $userId) {
-            $user = User::find($userId);
-            $user->notify(new \App\Notifications\TaggedInPostNotification($post));
-        }
+        // foreach ($mentionedUsers as $userId) {
+        //     $user = User::find($userId);
+        //     $user->notify(new \App\Notifications\TaggedInPostNotification($post));
+        // }
 
         return redirect()->back()->with('success', 'Post created successfully!');
     }

@@ -6,7 +6,8 @@
         <div class="col-8 ms-5">
             <div class="mb-3 px-32 w-100">
                 <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
-                    <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off" style="border-radius: 10px">
+                    <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off"
+                        style="border-radius: 10px">
                 </div>
             </div>
             @foreach ($posts as $post)
@@ -111,7 +112,19 @@
                     <!-- Caption -->
                     <a href="{{ route('posts.show', $post->id) }}">
                         <p class="mt-2">
-                            {{ $post->caption }}
+                            @php
+                            $parsed1 = preg_replace_callback(
+                                '/@([\w]+)/',
+                                function ($matches1) {
+                                    $username1 = e($matches1[1]);
+                                    $url1 = url("/{$username1}");
+                                    return "<span class=\"text-primary\">@{$username1}</span>";
+                                },
+                                $post->caption,
+                            );
+                        @endphp
+
+                        {!! $parsed1 !!}
                         </p>
                     </a>
 

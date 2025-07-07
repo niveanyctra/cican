@@ -39,21 +39,25 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.forEach(user => {
                         const avatar = user.avatar ? `/storage/${user.avatar}` : '{{ asset('default-image.jpg') }}';
                         html += `
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <a href="/${user.username}" class="text-decoration-none">
+                            <div class="d-flex align-items-center col-8" ">
+                                        <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
                                     <div>
                                         <strong>${user.name}</strong><br>
                                         <small>@${user.username}</small><br>
                                         <small class="text-muted">${user.bio ?? ''}</small>
                                     </div>
-                                </div>
+                            </div>
+                                </a>
+                            <div class="col-4 text-end">
                                 ${user.id !== authUserId ? `
                                 <button class="btn btn-sm ${user.is_followed ? 'btn-secondary' : 'btn-primary'} follow-toggle-btn"
                                     data-user-id="${user.id}">
                                     ${user.is_followed ? 'Unfollow' : 'Follow'}
                                 </button>
                                 ` : ''}
+                                </div>
                             </div>
                         `;
                     });

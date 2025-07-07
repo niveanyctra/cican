@@ -140,14 +140,38 @@
                         <!-- Caption -->
                         <a href="{{ route('posts.show', $post->id) }}">
                             <p class="mt-2">
-                                {{ $post->caption }}
+                                @php
+                                    $parsed1 = preg_replace_callback(
+                                        '/@([\w]+)/',
+                                        function ($matches1) {
+                                            $username1 = e($matches1[1]);
+                                            $url1 = url("/{$username1}");
+                                            return "<span class=\"text-primary\">@{$username1}</span>";
+                                        },
+                                        $post->caption,
+                                    );
+                                @endphp
+
+                                {!! $parsed1 !!}
                             </p>
                         </a>
                     @else
                         <!-- Caption -->
                         <a href="{{ route('posts.show', $post->id) }}">
                             <p class="mt-2">
-                                {{ $post->caption }}
+                                @php
+                                    $parsed1 = preg_replace_callback(
+                                        '/@([\w]+)/',
+                                        function ($matches1) {
+                                            $username1 = e($matches1[1]);
+                                            $url1 = url("/{$username1}");
+                                            return "<span class=\"text-primary\">@{$username1}</span>";
+                                        },
+                                        $post->caption,
+                                    );
+                                @endphp
+
+                                {!! $parsed1 !!}
                             </p>
                         </a>
 

@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://unpkg.com/tributejs@5.1.3/dist/tribute.css">
 
     <style>
-        .profile img{
+        .profile img {
             max-width: 150px;
             height: 150px;
         }
@@ -37,6 +37,7 @@
                     @include('components.modal.follower')
                     @include('components.modal.following')
                 @endif
+                @include('components.modal.who-likes')
             </main>
         </div>
     @else
@@ -51,15 +52,14 @@
     </script>
     <script src="https://unpkg.com/tributejs@5.1.3/dist/tribute.js"></script>
     <script>
-        function toggleLike(postId) {
-            const button = document.getElementById(`like-button-${postId}`);
-            const icon = document.getElementById(`like-icon-${postId}`);
-            const countElement = document.getElementById(`like-count-${postId}`);
+        function toggleLike(postId, context = 'feed') {
+            const otherContext = context === 'feed' ? 'modal' : 'feed';
+            const icon = document.getElementById(`like-icon-${context}-${postId}`);
+            const iconOther = document.getElementById(`like-icon-${otherContext}-${postId}`);
+            const countElement = document.getElementById(`like-count-${context}-${postId}`);
+            const countElementOther = document.getElementById(`like-count-${otherContext}-${postId}`);
 
-            // Tentukan apakah pengguna sudah menyukai postingan
             const isLiked = icon.classList.contains('fa-solid');
-
-            // Tentukan URL dan method
             const url = `/posts/${postId}/like`;
             const method = isLiked ? 'DELETE' : 'POST';
 
@@ -67,49 +67,57 @@
                     method: method,
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    },
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.message) {
-                        // Update ikon like
+                    if (data.message && data.likeCount !== undefined) {
+                        // Update UI di konteks aktif
                         if (isLiked) {
-                            // Jika sebelumnya disukai, ubah ke tidak disukai
                             icon.classList.remove('fa-solid', 'text-danger');
                             icon.classList.add('fa-regular');
                         } else {
-                            // Jika sebelumnya tidak disukai, ubah ke disukai
                             icon.classList.remove('fa-regular');
                             icon.classList.add('fa-solid', 'text-danger');
                         }
-
-                        // Update jumlah like
                         countElement.textContent = data.likeCount;
 
-                        // Tampilkan pesan sukses (opsional)
-                        console.log(data.message);
+                        // Jika elemen lain ada, update juga
+                        if (iconOther && countElementOther) {
+                            if (isLiked) {
+                                iconOther.classList.remove('fa-solid', 'text-danger');
+                                iconOther.classList.add('fa-regular');
+                            } else {
+                                iconOther.classList.remove('fa-regular');
+                                iconOther.classList.add('fa-solid', 'text-danger');
+                            }
+                            countElementOther.textContent = data.likeCount;
+                        }
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error("Error:", error);
                 });
         }
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const tribute = new Tribute({
                 trigger: "@",
                 values: async (text, cb) => {
                     if (text.length >= 2) {
                         const res = await fetch(`/mention/users?query=${text}`);
                         const users = await res.json();
-                        cb(users.map(user => ({ key: user.username, value: user.username })));
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
                     } else {
                         cb([]);
                     }
                 },
-                selectTemplate: function (item) {
+                selectTemplate: function(item) {
                     return `@${item.original.key}`;
                 }
             });
@@ -117,7 +125,7 @@
             const commentInput = document.getElementById('comment-input');
             tribute.attach(commentInput);
         });
-        </script>
+    </script>
     @stack('scripts')
 </body>
 

@@ -160,7 +160,19 @@
                                         <!-- Caption -->
                                         <a href="{{ route('posts.show', $post->id) }}">
                                             <p class="mt-2">
-                                                {{ $post->caption }}
+                                                @php
+                                                    $parsed1 = preg_replace_callback(
+                                                        '/@([\w]+)/',
+                                                        function ($matches1) {
+                                                            $username1 = e($matches1[1]);
+                                                            $url1 = url("/{$username1}");
+                                                            return "<span class=\"text-primary\">@{$username1}</span>";
+                                                        },
+                                                        $post->caption,
+                                                    );
+                                                @endphp
+
+                                                {!! $parsed1 !!}
                                             </p>
                                         </a>
 
@@ -227,15 +239,8 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.status === 'followed') {
-                                button.classList.remove('btn-outline-primary');
-                                button.classList.add('btn-outline-secondary');
-                                button.textContent = 'Unfollow';
-                            } else if (data.status === 'unfollowed') {
-                                button.classList.remove('btn-outline-secondary');
-                                button.classList.add('btn-outline-primary');
-                                button.textContent = 'Follow';
-                            }
+                            // Refresh page after follow/unfollow
+                            window.location.reload();
                         })
                         .catch(error => {
                             console.error('Gagal toggle follow:', error);

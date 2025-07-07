@@ -41,32 +41,30 @@ form{ width: 100%; }
     position: absolute;
     right: 0px;
     width: 50%;
-    height: 100%;
+    height: 100px;
     background: #fff;
     display: flex;
-    flex-direction: column; /* Tambahkan agar input tersusun ke bawah */
     align-items: center;
     color: #333;
-    justify-content: center;
     text-align: center;
     padding: 40px;
     z-index: 1;
     transition: .6s ease-in-out 1.2s, visibility 0s 1s;
 }
 
-.container.active .form-box{ right: 50%; }
+.container.actiive .form-box{ right: 50%; }
 
 .form-box.register{ visibility: hidden; }
-    .container.active .form-box.register{ visibility: visible; }
+    .container.actiive .form-box.register{ visibility: visible; }
 
 .input-box{
     position: relative;
-    margin: 30px 0;
+    margin: 20px 0;
 }
 
 .input-box input{
     width: 100%;
-    padding: 13px 50px 13px 20px;
+    padding: 10px 0;
     background: #eee;
     border-radius: 8px;
     border: none;
@@ -98,13 +96,14 @@ form{ width: 100%; }
 .btn{
     width: 100%;
     height: 48px;
-    background: #ecd074;
+    background: #7494ec;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     border: none;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
+    color: #fff;
 }
 
 .social-icons{
@@ -118,28 +117,28 @@ form{ width: 100%; }
         display: inline-flex;
         font-size: 24px;
         color: #333;
-        margin: 0 8px;
+        margin: 0 10px;
 }
 
 .toggle-box{
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 1000%;
+    height: 100px;
 }
     .toggle-box::before{
     content: '';
     position: absolute;
-    left: -250%;
+    left: -250px;
     width: 300%;
     height: 100%;
-    background: #ecd074;
-    /* border: 2px; solid red;*/
+    background: #7494ec;
+    /* border: 20px; solid red;*/
     border-radius: 150px;
     z-index: 2;
-    transition: 1.8s ease-in-out;
+    transition: .1.8s ease-in-out;
 }
 
-    .container.active .toggle-box::before{ left: 50%; }
+    .container.actiive .toggle-box::before{ left: 50%; }
 
 .toggle-panel{
     position: absolute;
@@ -159,31 +158,31 @@ form{ width: 100%; }
         transition-delay: 1.2s;
     }
 
-        .container.active .toggle-panel.toggle-left{
+        .container.actiive .toggle-panel.toggle-left{
             left: -50%;
             transition-delay: .6s;
         }
 
         .toggle-panel.toggle-right{
         right: -50%;
-        transition-delay: 1.2s;
+        transition-delay: 6s;
     }
-        .container.active .toggle-panel.toggle-right{
+        .container.actiive .toggle-panel.toggle-right{
             right: 0%;
             transition-delay: 1.2s;
         }
 .toggle-panel p{ margin-bottom: 20px;}
 
-.toggle-panel .btn{
+.toggle-panel.btn{
     width: 160px;
     height: 46px;
     background: transparent;
-    box-shadow: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     border: 2px solid #fff;
 }
 
 @media screen and (max-width: 650px) {
-    .container{ height: calc(100vh - 40px); }
+    .container{ height: calc (100vh - 40px); }
 
     .form-box{
         bottom: 0%;
@@ -191,7 +190,7 @@ form{ width: 100%; }
         width: 100;
     }
 
-        .container.active .form-box{
+        .container.actiive .form-box{
             right: 0;
             bottom: 30%;
         }
@@ -199,15 +198,15 @@ form{ width: 100%; }
     .toggle-box::before{
         left: 0;
         width: 100%;
-        top: -270%;
+        top: -270px;
         height: 300%;
         border-radius: 20vw;
     }
-        .container.active .toggle-box::before{
+        .container.actiive .toggle-box::before{
             left: 0;
             top: 70%;
         }
-        .container.active .toggle-panel.toggle-left{
+        .container.actiive .toggle-panel.toggle-left{
             left: 0;
             top: -30%;
         }
@@ -222,7 +221,7 @@ form{ width: 100%; }
             right: 0%;
             bottom: -30%;
         }
-        .container.active .toggle-panel.toggle-right{ bottom: 0; }
+        .container.actiive .toggle-panel.toggle-right{ bottom: 0; }
 }
 
 @media screen and (max-width: 400px){

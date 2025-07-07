@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://unpkg.com/tributejs@5.1.3/dist/tribute.css">
 
     <style>
-        .profile img{
+        .profile img {
             max-width: 150px;
             height: 150px;
         }
@@ -37,6 +37,7 @@
                     @include('components.modal.follower')
                     @include('components.modal.following')
                 @endif
+                @include('components.modal.who-likes')
             </main>
         </div>
     @else
@@ -52,12 +53,21 @@
     <script src="https://unpkg.com/tributejs@5.1.3/dist/tribute.js"></script>
     <script>
         function toggleLike(postId) {
-            const button = document.getElementById(`like-button-${postId}`);
-            const icon = document.getElementById(`like-icon-${postId}`);
-            const countElement = document.getElementById(`like-count-${postId}`);
+            // Cari semua elemen like untuk post ini
+            // Gunakan querySelectorAll untuk mendapatkan semua elemen dengan ID yang sama
+            const allLikeButtons = document.querySelectorAll(`[id^="like-button-feed-${postId}"]`);
+            const allLikeIcons = document.querySelectorAll(`[id^="like-icon-feed-${postId}"]`);
+            const allLikeCounts = document.querySelectorAll(`[id^="like-count-feed-${postId}"]`);
 
-            // Tentukan apakah pengguna sudah menyukai postingan
-            const isLiked = icon.classList.contains('fa-solid');
+            // Jika tidak ada elemen yang ditemukan, coba dengan ID alternatif
+            if (allLikeIcons.length === 0) {
+                console.error('Like elements not found for post ID:', postId);
+                return;
+            }
+
+            // Tentukan apakah pengguna sudah menyukai postingan (dari icon pertama yang ditemukan)
+            const firstIcon = allLikeIcons[0];
+            const isLiked = firstIcon.classList.contains('fa-solid');
 
             // Tentukan URL dan method
             const url = `/posts/${postId}/like`;
@@ -73,21 +83,24 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.message) {
-                        // Update ikon like
-                        if (isLiked) {
-                            // Jika sebelumnya disukai, ubah ke tidak disukai
-                            icon.classList.remove('fa-solid', 'text-danger');
-                            icon.classList.add('fa-regular');
-                        } else {
-                            // Jika sebelumnya tidak disukai, ubah ke disukai
-                            icon.classList.remove('fa-regular');
-                            icon.classList.add('fa-solid', 'text-danger');
-                        }
+                        // Update semua ikon like yang ditemukan
+                        allLikeIcons.forEach(iconElement => {
+                            if (isLiked) {
+                                // Jika sebelumnya disukai, ubah ke tidak disukai
+                                iconElement.classList.remove('fa-solid', 'text-danger');
+                                iconElement.classList.add('fa-regular');
+                            } else {
+                                // Jika sebelumnya tidak disukai, ubah ke disukai
+                                iconElement.classList.remove('fa-regular');
+                                iconElement.classList.add('fa-solid', 'text-danger');
+                            }
+                        });
 
-                        // Update jumlah like
-                        countElement.textContent = data.likeCount;
+                        // Update jumlah like untuk semua elemen count yang ditemukan
+                        allLikeCounts.forEach(countEl => {
+                            countEl.textContent = `${data.likeCount} likes`;
+                        });
 
-                        // Tampilkan pesan sukses (opsional)
                         console.log(data.message);
                     }
                 })
@@ -97,19 +110,22 @@
         }
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const tribute = new Tribute({
                 trigger: "@",
                 values: async (text, cb) => {
                     if (text.length >= 2) {
                         const res = await fetch(`/mention/users?query=${text}`);
                         const users = await res.json();
-                        cb(users.map(user => ({ key: user.username, value: user.username })));
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
                     } else {
                         cb([]);
                     }
                 },
-                selectTemplate: function (item) {
+                selectTemplate: function(item) {
                     return `@${item.original.key}`;
                 }
             });
@@ -141,7 +157,7 @@
             const commentInput = document.getElementById('caption');
             tribute.attach(caption);
         });
-        </script>
+    </script>
     @stack('scripts')
 </body>
 

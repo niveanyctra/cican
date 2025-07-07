@@ -2,11 +2,10 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content p-3">
             <div class="modal-header">
-                <h5 class="modal-title" id="searchModalLabel">Cari Pengguna</h5>
+                <input type="text" id="liveSearchInput" class="form-control" placeholder="Search" autocomplete="off">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" id="liveSearchInput" class="form-control" placeholder="Cari berdasarkan nama atau username...">
                 <div id="searchResults" class="mt-3"></div>
             </div>
         </div>

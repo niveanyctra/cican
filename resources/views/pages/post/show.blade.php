@@ -158,27 +158,7 @@
 
                                     <!-- Fixed Bottom Section -->
                                     <div class="bottom-post flex-shrink-0 pt-3" style="border-top: 1px solid #dee2e6;">
-                                        <!-- Like Section -->
-                                        <div id="like-section-modal-{{ $post->id }}" class="my-2 d-flex">
-                                            <div class="d-flex gap-1">
-                                                <button id="like-button-feed-{{ $post->id }}"
-                                                    onclick="toggleLike({{ $post->id }})">
-                                                    <!-- Ikon Like -->
-                                                    <i id="like-icon-feed-{{ $post->id }}"
-                                                        class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                                                </button>
-                                                <div data-bs-toggle="modal"
-                                                    data-bs-target="#showWhoLikeModal{{ $post->id }}">
-                                                    <span
-                                                        id="like-count-feed-{{ $post->id }}">{{ $post->likes->count() }}
-                                                        likes</span>
-                                                </div>
-                                            </div>
-                                            <a href="{{ route('posts.show', $post->id) }}">
-                                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                                <span>{{ $post->comments->count() }} comments</span>
-                                            </a>
-                                        </div>
+                                        @include('components.like-comments')
 
                                         <!-- Comment Form -->
                                         <form action="{{ route('comments.store', $post->id) }}" method="POST"
@@ -290,27 +270,7 @@
                                     <!-- Fixed Bottom Section -->
                                     <div class="bottom-post flex-shrink-0 pt-3"
                                         style="border-top: 1px solid #dee2e6;">
-                                        <!-- Like Section -->
-                                        <div id="like-section-modal-{{ $post->id }}" class="my-2 d-flex">
-                                            <div class="d-flex gap-1">
-                                                <button id="like-button-feed-{{ $post->id }}"
-                                                    onclick="toggleLike({{ $post->id }})">
-                                                    <!-- Ikon Like -->
-                                                    <i id="like-icon-feed-{{ $post->id }}"
-                                                        class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                                                </button>
-                                                <div data-bs-toggle="modal"
-                                                    data-bs-target="#showWhoLikeModal{{ $post->id }}">
-                                                    <span
-                                                        id="like-count-feed-{{ $post->id }}">{{ $post->likes->count() }}
-                                                        likes</span>
-                                                </div>
-                                            </div>
-                                            <a href="{{ route('posts.show', $post->id) }}">
-                                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                                <span>{{ $post->comments->count() }} comments</span>
-                                            </a>
-                                        </div>
+                                        @include('components.like-comments')
 
                                         <!-- Comment Form -->
                                         <form action="{{ route('comments.store', $post->id) }}" method="POST"

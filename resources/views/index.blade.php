@@ -123,25 +123,7 @@
                             @endif
                         </div>
 
-                        <!-- Like dan Komentar -->
-                        <div id="like-section-feed-{{ $post->id }}" class="my-2 ms-3 d-flex">
-                            <div class="d-flex gap-1">
-                                <button id="like-button-feed-{{ $post->id }}"
-                                    onclick="toggleLike({{ $post->id }})">
-                                    <!-- Ikon Like -->
-                                    <i id="like-icon-feed-{{ $post->id }}"
-                                        class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                                </button>
-                                <div data-bs-toggle="modal" data-bs-target="#showWhoLikeModal{{ $post->id }}">
-                                    <span id="like-count-feed-{{ $post->id }}">{{ $post->likes->count() }}
-                                        likes</span>
-                                </div>
-                            </div>
-                            <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
-                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                <span>{{ $post->comments->count() }} comments</span>
-                            </div>
-                        </div>
+                        @include('components.like-comments')
 
                         <!-- Caption -->
                         <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
@@ -181,32 +163,14 @@
                             </p>
                         </div>
 
-                        <!-- Like dan Komentar -->
-                        <div id="like-section-feed-{{ $post->id }}" class="my-2 ms-3 d-flex">
-                            <div class="d-flex gap-1">
-                                <button id="like-button-feed-{{ $post->id }}"
-                                    onclick="toggleLike({{ $post->id }})">
-                                    <!-- Ikon Like -->
-                                    <i id="like-icon-feed-{{ $post->id }}"
-                                        class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                                </button>
-                                <div data-bs-toggle="modal" data-bs-target="#showWhoLikeModal{{ $post->id }}">
-                                    <span id="like-count-feed-{{ $post->id }}">{{ $post->likes->count() }}
-                                        likes</span>
-                                </div>
-                            </div>
-                            <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
-                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                <span>{{ $post->comments->count() }} comments</span>
-                            </div>
-                        </div>
+                        @include('components.like-comments')
                     @endif
 
                     <!-- Form Komentar -->
                     <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                         @csrf
                         <textarea id="comment-input" name="body" class="form-control form-control-sm" placeholder="Komentar . . ."
-                            style="width: 100%" rows="2"></textarea>
+                            style="width: 100%" rows="1"></textarea>
 
                         <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                     </form>

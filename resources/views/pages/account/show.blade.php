@@ -10,6 +10,8 @@
     </style>
 @endpush
 @section('content')
+    @include('pages.post.edit')
+    @include('pages.post.show')
     <div class="container px-40">
         <!-- Header Profil -->
         <div class="d-flex align-items-start mb-4">
@@ -78,7 +80,8 @@
                     @foreach ($posts as $post)
                         @if ($post->media->isNotEmpty())
                             <div class="col-4 p-0">
-                                <a href="{{ route('posts.show', $post->id) }}" class="d-block h-100">
+                                <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}"
+                                    class="d-block h-100">
                                     <div class="position-relative h-100" style="min-height: 350px; max-height: 350px;">
                                         @php
                                             $firstMedia = $post->media->first();
@@ -91,7 +94,7 @@
                                         <img src="{{ $imageUrl }}" alt="Post Media" class="img-fluid w-100 h-100"
                                             style="object-fit: cover;">
                                     </div>
-                                </a>
+                                </div>
                             </div>
                         @endif
                     @endforeach
@@ -158,28 +161,13 @@
                                         </div>
 
                                         <!-- Caption -->
-                                        <a href="{{ route('posts.show', $post->id) }}">
+                                        <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
                                             <p class="mt-2">
                                                 {{ $post->caption }}
                                             </p>
-                                        </a>
-
-                                        <!-- Like dan Komentar -->
-                                        <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
-                                            <button id="like-button-{{ $post->id }}"
-                                                onclick="toggleLike({{ $post->id }})">
-                                                <!-- Ikon Like -->
-                                                <i id="like-icon-{{ $post->id }}"
-                                                    class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                                            </button>
-                                            <!-- Jumlah Like -->
-                                            <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
-                                            likes
-                                            <a href="{{ route('posts.show', $post->id) }}">
-                                                <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                                                <span>{{ $post->comments->count() }} comments</span>
-                                            </a>
                                         </div>
+
+                                        @include('components.like-comments')
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
     @include('pages.post.edit')
+    @include('pages.post.show')
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
         <div class="col-8 ms-5">
@@ -64,20 +65,7 @@
                         </p>
                     </a>
 
-                    <!-- Like dan Komentar -->
-                    <div id="like-section-{{ $post->id }}" class="my-2 ms-3">
-                        <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
-                            <!-- Ikon Like -->
-                            <i id="like-icon-{{ $post->id }}"
-                                class="{{ auth()->check() && $post->likes->contains(auth()->id()) ? 'fa-solid fa-heart fa-xl text-danger' : 'fa-regular fa-heart fa-xl' }}"></i>
-                        </button>
-                        <!-- Jumlah Like -->
-                        <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> likes
-                        <a href="{{ route('posts.show', $post->id) }}">
-                            <i class="fa-regular fa-comment fa-xl ms-2"></i>
-                            <span>{{ $post->comments->count() }} comments</span>
-                        </a>
-                    </div>
+                    @include('components.like-comments')
 
                     <!-- Form Komentar -->
                     <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">

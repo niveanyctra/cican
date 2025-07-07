@@ -116,6 +116,30 @@
 
             const commentInput = document.getElementById('comment-input');
             tribute.attach(commentInput);
+            const commentInput = document.getElementById('caption');
+            tribute.attach(caption);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({ key: user.username, value: user.username })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function (item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+            const commentInput = document.getElementById('caption');
+            tribute.attach(caption);
         });
         </script>
     @stack('scripts')

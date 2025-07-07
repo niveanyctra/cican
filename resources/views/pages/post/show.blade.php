@@ -100,7 +100,21 @@
             <div class="flex-grow-1 overflow-auto" style="min-height: 0;">
                 <!-- Caption -->
                 <div class="mb-3">
-                    <p>{{ $post->caption }}</p>
+                    <p>
+                        @php
+                            $parsed1 = preg_replace_callback(
+                                '/@([\w]+)/',
+                                function ($matches1) {
+                                    $username1 = e($matches1[1]);
+                                    $url1 = url("/{$username1}");
+                                    return "<a href=\"{$url1}\" class=\"text-primary\">@{$username1}</a>";
+                                },
+                                $post->caption
+                            );
+                        @endphp
+
+                        {!! $parsed1 !!}
+                    </p>
                 </div>
                 <hr class="my-3">
 

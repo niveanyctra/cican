@@ -52,14 +52,24 @@
     </script>
     <script src="https://unpkg.com/tributejs@5.1.3/dist/tribute.js"></script>
     <script>
-        function toggleLike(postId, context = 'feed') {
-            const otherContext = context === 'feed' ? 'modal' : 'feed';
-            const icon = document.getElementById(`like-icon-${context}-${postId}`);
-            const iconOther = document.getElementById(`like-icon-${otherContext}-${postId}`);
-            const countElement = document.getElementById(`like-count-${context}-${postId}`);
-            const countElementOther = document.getElementById(`like-count-${otherContext}-${postId}`);
+        function toggleLike(postId) {
+            // Cari semua elemen like untuk post ini
+            // Gunakan querySelectorAll untuk mendapatkan semua elemen dengan ID yang sama
+            const allLikeButtons = document.querySelectorAll(`[id^="like-button-feed-${postId}"]`);
+            const allLikeIcons = document.querySelectorAll(`[id^="like-icon-feed-${postId}"]`);
+            const allLikeCounts = document.querySelectorAll(`[id^="like-count-feed-${postId}"]`);
 
-            const isLiked = icon.classList.contains('fa-solid');
+            // Jika tidak ada elemen yang ditemukan, coba dengan ID alternatif
+            if (allLikeIcons.length === 0) {
+                console.error('Like elements not found for post ID:', postId);
+                return;
+            }
+
+            // Tentukan apakah pengguna sudah menyukai postingan (dari icon pertama yang ditemukan)
+            const firstIcon = allLikeIcons[0];
+            const isLiked = firstIcon.classList.contains('fa-solid');
+
+            // Tentukan URL dan method
             const url = `/posts/${postId}/like`;
             const method = isLiked ? 'DELETE' : 'POST';
 
@@ -67,37 +77,35 @@
                     method: method,
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.message && data.likeCount !== undefined) {
-                        // Update UI di konteks aktif
-                        if (isLiked) {
-                            icon.classList.remove('fa-solid', 'text-danger');
-                            icon.classList.add('fa-regular');
-                        } else {
-                            icon.classList.remove('fa-regular');
-                            icon.classList.add('fa-solid', 'text-danger');
-                        }
-                        countElement.textContent = data.likeCount;
-
-                        // Jika elemen lain ada, update juga
-                        if (iconOther && countElementOther) {
+                    if (data.message) {
+                        // Update semua ikon like yang ditemukan
+                        allLikeIcons.forEach(iconElement => {
                             if (isLiked) {
-                                iconOther.classList.remove('fa-solid', 'text-danger');
-                                iconOther.classList.add('fa-regular');
+                                // Jika sebelumnya disukai, ubah ke tidak disukai
+                                iconElement.classList.remove('fa-solid', 'text-danger');
+                                iconElement.classList.add('fa-regular');
                             } else {
-                                iconOther.classList.remove('fa-regular');
-                                iconOther.classList.add('fa-solid', 'text-danger');
+                                // Jika sebelumnya tidak disukai, ubah ke disukai
+                                iconElement.classList.remove('fa-regular');
+                                iconElement.classList.add('fa-solid', 'text-danger');
                             }
-                            countElementOther.textContent = data.likeCount;
-                        }
+                        });
+
+                        // Update jumlah like untuk semua elemen count yang ditemukan
+                        allLikeCounts.forEach(countEl => {
+                            countEl.textContent = `${data.likeCount} likes`;
+                        });
+
+                        console.log(data.message);
                     }
                 })
                 .catch(error => {
-                    console.error("Error:", error);
+                    console.error('Error:', error);
                 });
         }
     </script>

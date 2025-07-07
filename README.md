@@ -15,7 +15,7 @@ Cican was an website like Instagram
 Several quick start options are available:
 
 -   Clone the repo: `git clone https://github.com/niveanyctra/cican`
--   Run `cd` to the newly created `/cican` directory
+-   Run `cd /cican` command
 -   Run `composer install` command
 -   Run `npm install` command
 -   Run `npm run build` command

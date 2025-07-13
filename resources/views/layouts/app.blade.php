@@ -130,10 +130,101 @@
                 }
             });
 
-            const commentInput = document.getElementById('comment-input');
-            tribute.attach(commentInput);
-            const commentInput = document.getElementById('caption');
-            tribute.attach(caption);
+
+            const commentInputSnapee =
+                document.getElementById('comment-input-snapee')
+            if (commentInputSnapee) {
+                tribute.attach(commentInputSnapee);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInputtextee =
+                document.getElementById('comment-input-textee')
+            if (commentInputtextee) {
+                tribute.attach(commentInputtextee);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInputModal =
+                document.getElementById('comment-input-modal');
+            if (commentInputModal) {
+                tribute.attach(commentInputModal);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInput = document.getElementById('comment-input-index') ||
+                document.getElementById('comment-input-snapee') ||
+                document.getElementById('comment-input-textee') ||
+                document.getElementById('comment-input');
+            if (commentInput) {
+                tribute.attach(commentInput);
+            }
         });
     </script>
     <script>

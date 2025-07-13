@@ -59,62 +59,62 @@
                     </div>
 
                     <!-- Media (Gambar/Video) -->
-                    <a href="{{ route('posts.show', $post->id) }}">
-                        <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
-                            <div class="carousel-inner">
-                                @foreach ($post->media as $index => $media)
-                                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                        @if ($media->type === 'image')
-                                            <!-- Gambar -->
-                                            <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
-                                                class="d-block w-100 img-fluid">
-                                        @elseif ($media->type === 'video')
-                                            <!-- Video -->
-                                            <video controls class="d-block w-100 img-fluid" style="height: auto;">
-                                                <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
-                                                Browser Anda tidak mendukung elemen video.
-                                            </video>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
 
-                            <!-- Tombol Navigasi Carousel -->
-                            @if ($post->media->count() > 1)
-                                <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button"
-                                    data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            @endif
+                    <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
+                        <div class="carousel-inner">
+                            @foreach ($post->media as $index => $media)
+                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                    @if ($media->type === 'image')
+                                        <!-- Gambar -->
+                                        <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
+                                            class="d-block w-100 img-fluid">
+                                    @elseif ($media->type === 'video')
+                                        <!-- Video -->
+                                        <video controls class="d-block w-100 img-fluid" style="height: auto;">
+                                            <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
+                                            Browser Anda tidak mendukung elemen video.
+                                        </video>
+                                    @endif
+                                </div>
+                            @endforeach
                         </div>
-                    </a>
+
+                        <!-- Tombol Navigasi Carousel -->
+                        @if ($post->media->count() > 1)
+                            <button class="carousel-control-prev" type="button"
+                                data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        @endif
+                    </div>
+
 
                     @include('components.like-comments')
 
                     <!-- Caption -->
-                    <a href="{{ route('posts.show', $post->id) }}">
+                    <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
                         <p class="mt-2">
                             @php
-                            $parsed1 = preg_replace_callback(
-                                '/@([\w]+)/',
-                                function ($matches1) {
-                                    $username1 = e($matches1[1]);
-                                    $url1 = url("/{$username1}");
-                                    return "<span class=\"text-primary\">@{$username1}</span>";
-                                },
-                                $post->caption,
-                            );
-                        @endphp
+                                $parsed1 = preg_replace_callback(
+                                    '/@([\w]+)/',
+                                    function ($matches1) {
+                                        $username1 = e($matches1[1]);
+                                        $url1 = url("/{$username1}");
+                                        return "<span class=\"text-primary\">@{$username1}</span>";
+                                    },
+                                    $post->caption,
+                                );
+                            @endphp
 
-                        {!! $parsed1 !!}
+                            {!! $parsed1 !!}
                         </p>
-                    </a>
+                    </div>
 
                     <!-- Form Komentar -->
                     <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">

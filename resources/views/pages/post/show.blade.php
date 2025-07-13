@@ -56,7 +56,7 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                    
+
                                     <!-- Tombol Navigasi Carousel -->
                                     @if ($post->media->count() > 1)
                                         <button class="carousel-control-prev" type="button"
@@ -245,7 +245,7 @@
                                                                 '/@([\w]+)/',
                                                                 function ($matches) {
                                                                     $username = e($matches[1]);
-                                                                    $url = url("/profile/{$username}");
+                                                                    $url = url("/{$username}");
                                                                     return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
                                                                 },
                                                                 e($comment->body),

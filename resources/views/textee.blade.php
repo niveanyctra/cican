@@ -59,7 +59,7 @@
                     </div>
 
                     <!-- Caption -->
-                    <a href="{{ route('posts.show', $post->id) }}">
+                    <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
                         <p class="mt-2">
                             @php
                                 $parsed1 = preg_replace_callback(
@@ -75,7 +75,7 @@
 
                             {!! $parsed1 !!}
                         </p>
-                    </a>
+                    </div>
 
                     @include('components.like-comments')
 

@@ -35,17 +35,7 @@
                     @enderror
                     <i class="bx bxs-lock-alt"></i>
                 </div>
-                <div class="forgot-link">
-                    <a href="#">Forgot Password?</a>
-                </div>
                 <button type="submit" class="btn">Login</button>
-                {{-- <p>or login with social platforms</p>
-                <div class="social-icons">
-                    <a href="#"><i class="bx bxl-google"></i></a>
-                    <a href="#"><i class="bx bxl-facebook"></i></a>
-                    <a href="#"><i class="bx bxl-github"></i></a>
-                    <a href="#"><i class="bx bxl-linkedin"></i></a>
-                </div> --}}
             </form>
         </div>
 

@@ -134,7 +134,7 @@
                                                                 '/@([\w]+)/',
                                                                 function ($matches) {
                                                                     $username = e($matches[1]);
-                                                                    $url = url("/profile/{$username}");
+                                                                    $url = url("/{$username}");
                                                                     return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
                                                                 },
                                                                 e($comment->body),

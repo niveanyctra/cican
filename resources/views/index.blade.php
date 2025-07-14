@@ -146,7 +146,7 @@
                         <!-- Form Komentar -->
                         <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                             @csrf
-                            <textarea id="comment-input-index-snapee" name="body" class="form-control form-control-sm"
+                            <textarea id="" name="body" class="form-control form-control-sm comment-input-index-snapee"
                                 placeholder="Komentar . . ." style="width: 100%" rows="1"></textarea>
 
                             <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
@@ -173,7 +173,7 @@
                                             <!-- Form Komentar -->
                     <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                         @csrf
-                        <textarea id="comment-input-index-textee" name="body" class="form-control form-control-sm" placeholder="Komentar . . ."
+                        <textarea id="" name="body" class="form-control form-control-sm comment-input-index-textee" placeholder="Komentar . . ."
                             style="width: 100%" rows="1"></textarea>
 
                         <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">

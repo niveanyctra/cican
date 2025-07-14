@@ -240,7 +240,23 @@
                                     <div class="flex-grow-1 overflow-auto" style="min-height: 0;">
                                         <!-- Caption -->
                                         <div class="mb-3">
-                                            <p>{{ $post->caption }}</p>
+                                            <p>
+                                                {{-- {{ $post->caption }} --}}
+                                                @php
+                                                    $parsed = preg_replace_callback(
+                                                        '/@([\w]+)/',
+                                                        function ($matches) {
+                                                            $username = e($matches[1]);
+                                                            $url = url("/{$username}");
+                                                            return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
+                                                        },
+                                                        e($post->caption),
+                                                    );
+                                                @endphp
+
+                                                {!! $parsed !!}
+
+                                            </p>
                                         </div>
                                         <hr class="my-3">
 
@@ -290,7 +306,7 @@
                                         <form action="{{ route('comments.store', $post->id) }}" method="POST"
                                             class="d-flex">
                                             @csrf
-                                            <input type="text" id="comment-input"
+                                            <input type="text" id="comment-input-modal-textee"
                                                 class="form-control form-control-sm" name="body"
                                                 placeholder="Komentar . . ." style="width: 100%; resize: none;">
                                             <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">

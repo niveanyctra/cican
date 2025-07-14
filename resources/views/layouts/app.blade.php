@@ -218,12 +218,9 @@
             });
 
 
-            const commentInput = document.getElementById('comment-input-index') ||
-                document.getElementById('comment-input-snapee') ||
-                document.getElementById('comment-input-textee') ||
-                document.getElementById('comment-input');
-            if (commentInput) {
-                tribute.attach(commentInput);
+            const commentInputModalTextee = document.getElementById('comment-input-modal-textee')
+            if (commentInputModalTextee) {
+                tribute.attach(commentInputModalTextee);
             }
         });
     </script>

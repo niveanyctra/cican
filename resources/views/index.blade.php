@@ -129,18 +129,18 @@
                         <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
                             <p class="mt-2">
                                 @php
-                                    $parsed1 = preg_replace_callback(
+                                    $parsed = preg_replace_callback(
                                         '/@([\w]+)/',
-                                        function ($matches1) {
-                                            $username1 = e($matches1[1]);
-                                            $url1 = url("/{$username1}");
-                                            return "<span class=\"text-primary\">@{$username1}</span>";
+                                        function ($matches) {
+                                            $username = e($matches[1]);
+                                            $url = url("/{$username}");
+                                            return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
                                         },
-                                        $post->caption,
+                                        e($post->caption),
                                     );
                                 @endphp
 
-                                {!! $parsed1 !!}
+                                {!! $parsed !!}
                             </p>
                         </div>
                     @else
@@ -148,18 +148,18 @@
                         <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
                             <p class="mt-2">
                                 @php
-                                    $parsed1 = preg_replace_callback(
+                                    $parsed = preg_replace_callback(
                                         '/@([\w]+)/',
-                                        function ($matches1) {
-                                            $username1 = e($matches1[1]);
-                                            $url1 = url("/{$username1}");
-                                            return "<span class=\"text-primary\">@{$username1}</span>";
+                                        function ($matches) {
+                                            $username = e($matches[1]);
+                                            $url = url("/{$username}");
+                                            return "<a href=\"{$url}\" class=\"text-primary\">@{$username}</a>";
                                         },
-                                        $post->caption,
+                                        e($post->caption),
                                     );
                                 @endphp
 
-                                {!! $parsed1 !!}
+                                {!! $parsed !!}
                             </p>
                         </div>
 

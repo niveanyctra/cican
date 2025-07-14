@@ -21,7 +21,7 @@ body{
     position: relative;
     width: 850px;
     height: 550px;
-    background: #fff;
+    background: #f5fafa;
     margin: 20px;
     border-radius: 30px;
     box-shadow: 0 0 30px rgba(0, 0, 0,.2);
@@ -42,7 +42,7 @@ form{ width: 100%; }
     right: 0px;
     width: 50%;
     height: 100%;
-    background: #fff;
+    background: #f5fafa;
     display: flex;
     flex-direction: column; /* Tambahkan agar input tersusun ke bawah */
     align-items: center;
@@ -53,6 +53,7 @@ form{ width: 100%; }
     z-index: 1;
     transition: .6s ease-in-out 1.2s, visibility 0s 1s;
 }
+
 
 .container.active .form-box{ right: 50%; }
 
@@ -98,13 +99,18 @@ form{ width: 100%; }
 .btn{
     width: 100%;
     height: 48px;
-    background: #ecd074;
+    background: #2A5286;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     border: none;
+    color: #f5fafa;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
+}
+.btn:hover{
+    border: 2px solid #2A5286;
+    color: #2A5286;
 }
 
 .social-icons{
@@ -132,7 +138,7 @@ form{ width: 100%; }
     left: -250%;
     width: 300%;
     height: 100%;
-    background: #ecd074;
+    background: #2A5286;
     /* border: 2px; solid red;*/
     border-radius: 150px;
     z-index: 2;
@@ -146,7 +152,7 @@ form{ width: 100%; }
     width: 50%;
     height: 100%;
     /* background: seagreen; */
-    color: #fff;
+    color: #ffff;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -166,7 +172,7 @@ form{ width: 100%; }
 
         .toggle-panel.toggle-right{
         right: -50%;
-        transition-delay: 1.2s;
+        transition-delay: .6s;
     }
         .container.active .toggle-panel.toggle-right{
             right: 0%;
@@ -179,8 +185,19 @@ form{ width: 100%; }
     height: 46px;
     background: transparent;
     box-shadow: none;
-    border: 2px solid #fff;
+    border: 2px solid #f5fafa;
 }
+
+.btn.register-btn{
+    background-color: #f5fafa;
+    color: #2A5286;
+}
+.btn.register-btn:hover{
+    background-color: #2A5286;
+    color: #f5fafa;
+}
+
+
 
 @media screen and (max-width: 650px) {
     .container{ height: calc(100vh - 40px); }

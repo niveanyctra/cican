@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Dongle&display=swap');
+
+body {
+    background-color: aqua;
+
+}
+
+.latar{
+    background-color: #E8E0D5;
+}
+
+.navigasi{
+    background-color: #2A5286;
+}
+
+/* background post */
+.col-7 {
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.carousel-item{
+    max-height: 20%;
+}
+
+/* Tombol navbar */
+.nav-btn{
+    padding: 2px;
+    font-family: "Dongle", sans-serif;
+    font-weight: 400;
+    font-size: 26px;
+    font-style: normal;
+}
+.nav-btn:hover{
+    transition: 0.5s;
+    background-color: #F5F5F5;
+    border-radius: 5px;
+    transition-timing-function: ease-out;
+}
+.nav-btn a,.nav-btn button{
+    color: white;
+}
+.nav-btn:last-child a{
+    color: #FF2627;
+}
+.nav-btn a:hover,.nav-btn button:hover{
+    color: black;
+}
+.nav-btn:last-child a:hover{
+    color: #FF2627;
+}
+/* Untuk semua ikon kecuali Logout */
+.nav-btn:not(:last-child) a:hover svg,
+.nav-btn:not(:last-child) button:hover svg {
+    stroke: black;
+}
+
+/* Untuk ikon Logout tetap merah saat di-hover */
+.nav-btn:last-child a:hover svg {
+    stroke: #FF2627;
+}
+
+.search{
+    background-color: transparent;
+    padding-bottom: 10px;
+}
+/* Semua element post */
+.mb-3{
+    border: 10px;
+    background-color: #F5F5F5;
+    padding: 20px;
+    border-radius: 15px;
+}
+.all-user{
+    background-color: #F5F5F5;
+    margin-left: 20px;
+    padding-top: 10px;
+    border-radius: 15px;
+}
+
+/* border foto atau video */
+/* .post-media {
+    border: 4px solid #74b9ff; 
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+} */
+/* .post-media:hover {
+    transform: scale(1.01);
+    border-color: #0984e3;
+} */
+
+.sakti{
+    background-color: violet;
+}
+
+.profile{
+    background-color: #F5F5F5;
+}
+
+

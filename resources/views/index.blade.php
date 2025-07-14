@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-    <style>
+    <!-- <style>
         .carousel-item {
             height: 80vh;
             /* Tetapkan tinggi container */
@@ -11,7 +11,7 @@
         .carousel-inner .d-flex {
             height: 100%;
         }
-    </style>
+    </style> -->
 @endpush
 @section('content')
     @include('pages.post.edit')
@@ -19,14 +19,15 @@
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
         <div class="col-7">
-            <div class="mb-3 ps-24 pe-6 w-100">
+            <!-- Search bar -->
+            <div class="rounded-circle w-100 search">
                 <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
                     <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off"
                         style="border-radius: 10px">
                 </div>
             </div>
             @foreach ($posts as $post)
-                <div class="mb-3 ps-24 pe-6">
+                <div class="mb-3 pe-5 align-items-center ">
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}" alt="Avatar"
@@ -74,7 +75,7 @@
 
                     @if ($post->media->isNotEmpty())
                         <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
-                            <div class="carousel-inner items-center" style="background: black">
+                            <div class="carousel-inner rounded-xl items-center" style="background: black">
                                 <!-- Indikator Carousel -->
                                 @if ($post->media->count() > 1)
                                     <div class="carousel-indicators">
@@ -94,11 +95,11 @@
                                         <div class="d-flex justify-content-center h-100">
                                             @if ($media->type === 'image')
                                                 <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
-                                                    class="img-fluid"
-                                                    style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                                                    class="img-fluid post-media"
+                                                    style="max-height: auto; max-width: auto; object-fit: contain;">
                                             @elseif ($media->type === 'video')
-                                                <video controls class="w-100"
-                                                    style="max-height: 80vh; object-fit: contain;">
+                                                <video controls class="w-100 post-media"
+                                                    style="max-height: auto; object-fit: contain;">
                                                     <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
                                                     Browser Anda tidak mendukung elemen video.
                                                 </video>
@@ -181,7 +182,7 @@
         </div>
 
         <!-- Sidebar Pengguna -->
-        <div class="col-4">
+        <div class="col-4 all-user">
             <h3 class="mb-3">All Users</h3>
             @foreach ($users as $user)
                 <div class="mb-3">

@@ -15,7 +15,7 @@ class SearchController extends Controller
 
         $users = User::where('name', 'LIKE', "%{$keyword}%")
             ->orWhere('username', 'LIKE', "%{$keyword}%")
-            ->get(['id', 'name', 'username', 'avatar', 'bio']);
+            ->distinct()->get(['id', 'name', 'username', 'avatar', 'bio']);
         // dd($users);
         return response()->json($users);
     }

@@ -37,15 +37,15 @@
 
                     <!-- Collaboration -->
                     <div class="mb-3">
-                        <label for="searchUsers" class="form-label">Cari Collaborators</label>
-                        <input type="text" id="searchUsers" class="form-control"
+                        <label for="searchUsersText" class="form-label">Cari Collaborators</label>
+                        <input type="text" id="searchUsersText" class="form-control"
                             placeholder="Cari nama atau username">
 
                         <!-- Daftar Collaborators yang Dipilih -->
-                        <div id="selectedCollaborators" class="mt-3"></div>
+                        <div id="selectedCollaboratorsText" class="mt-3"></div>
 
                         <!-- Input Hidden untuk Menyimpan ID Collaborators -->
-                        <input type="hidden" name="collaborators" id="collaboratorsInputCreate">
+                        <input type="hidden" name="collaborators" id="collaboratorsInputCreateText">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -89,15 +89,15 @@
 
                     <!-- Collaboration -->
                     <div class="mb-3">
-                        <label for="searchUsers" class="form-label">Cari Collaborators</label>
-                        <input type="text" id="searchUsers" class="form-control"
+                        <label for="searchUsersMedia" class="form-label">Cari Collaborators</label>
+                        <input type="text" id="searchUsersMedia" class="form-control"
                             placeholder="Cari nama atau username">
 
                         <!-- Daftar Collaborators yang Dipilih -->
-                        <div id="selectedCollaborators" class="mt-3"></div>
+                        <div id="selectedCollaboratorsMedia" class="mt-3"></div>
 
                         <!-- Input Hidden untuk Menyimpan ID Collaborators -->
-                        <input type="hidden" name="collaborators" id="collaboratorsInputCreate">
+                        <input type="hidden" name="collaborators" id="collaboratorsInputCreateMedia">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -114,100 +114,118 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInputCreate = document.getElementById('searchUsers');
-            const resultsContainerCreate = document.createElement('div'); // Wadah hasil pencarian
-            searchInputCreate.parentNode.appendChild(resultsContainerCreate);
-            const selectedCollaboratorsDivCreate = document.getElementById('selectedCollaborators');
-            const collaboratorsInputCreate = document.getElementById('collaboratorsInputCreate');
-            let selectedUsersCreate = []; // Array untuk menyimpan ID collaborator yang dipilih
+            // Fungsi untuk menginisialisasi pencarian collaborator
+            function initializeCollaboratorSearch(searchInputId, selectedCollaboratorsId, collaboratorsInputId, modalType) {
+                const searchInput = document.getElementById(searchInputId);
+                const resultsContainer = document.createElement('div');
+                resultsContainer.className = 'search-results mt-2';
+                searchInput.parentNode.appendChild(resultsContainer);
 
-            searchInputCreate.addEventListener('input', function() {
-                const query = this.value.trim();
+                const selectedCollaboratorsDiv = document.getElementById(selectedCollaboratorsId);
+                const collaboratorsInput = document.getElementById(collaboratorsInputId);
+                let selectedUsers = [];
 
-                if (query.length < 2) {
-                    resultsContainerCreate.innerHTML = '';
-                    return;
-                }
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim();
 
-                fetch(`{{ route('search.user') }}?query=${encodeURIComponent(query)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let html = '';
-
-                        if (data.length === 0) {
-                            html = '<p class="text-muted">Tidak ditemukan.</p>';
-                        } else {
-                            data.forEach(user => {
-                                // Jangan tampilkan user yang sudah dipilih atau user yang sedang login
-                                if (!selectedUsersCreate.includes(user.id) && user.id !==
-                                    {{ auth()->id() }}) {
-                                    const avatar = user.avatar ? `/storage/${user.avatar}` :
-                                        '{{ asset('default-image.jpg') }}';
-                                    html += `
-                                <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer" onclick="selectUserCreate(${user.id}, '${user.name}', '${user.username}')">
-                                    <div class="d-flex align-items-center">
-                                        <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
-                                        <div>
-                                            <strong>${user.name}</strong><br>
-                                            <small>@${user.username}</small><br>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                                }
-                            });
-                        }
-                        resultsContainerCreate.innerHTML = html;
-                    })
-                    .catch(err => {
-                        console.error('Error saat fetch:', err);
-                        resultsContainerCreate.innerHTML =
-                            '<p class="text-danger">Gagal memuat data.</p>';
-                    });
-            });
-
-            // Fungsi untuk menangani pemilihan user
-            window.selectUserCreate = function(userId, name, username) {
-                // Tambahkan user ke array jika belum ada
-                if (!selectedUsersCreate.includes(userId)) {
-                    selectedUsersCreate.push(userId);
-
-                    // Tampilkan user yang dipilih
-                    const displayValueCreate = `${name} (@${username})`;
-                    const collaboratorDivCreate = document.createElement('div');
-                    collaboratorDivCreate.className = 'd-flex align-items-center mb-2';
-                    collaboratorDivCreate.innerHTML = `
-                <span class="me-2">${displayValueCreate}</span>
-                <button type="button" class="btn btn-sm btn-danger" onclick="removeUserCreate(${userId})">Hapus</button>
-            `;
-                    selectedCollaboratorsDivCreate.appendChild(collaboratorDivCreate);
-
-                    // Perbarui nilai input hidden
-                    collaboratorsInputCreate.value = selectedUsersCreate.join(',');
-
-                    // Kosongkan hasil pencarian
-                    resultsContainerCreate.innerHTML = '';
-                    searchInputCreate.value = ''; // Reset input pencarian
-                }
-            };
-
-            // Fungsi untuk menghapus user dari daftar
-            window.removeUserCreate = function(userId) {
-                // Hapus user dari array
-                selectedUsersCreate = selectedUsersCreate.filter(id => id !== userId);
-
-                // Hapus elemen DOM yang sesuai
-                const collaboratorDivsCreate = selectedCollaboratorsDivCreate.querySelectorAll('div');
-                collaboratorDivsCreate.forEach(div => {
-                    const button = div.querySelector('button');
-                    if (button && button.onclick.toString().includes(`removeUserCreate(${userId})`)) {
-                        div.remove();
+                    if (query.length < 2) {
+                        resultsContainer.innerHTML = '';
+                        return;
                     }
+
+                    fetch(`{{ route('search.user') }}?query=${encodeURIComponent(query)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            let html = '';
+
+                            if (data.length === 0) {
+                                html = '<p class="text-muted">Tidak ditemukan.</p>';
+                            } else {
+                                data.forEach(user => {
+                                    // Jangan tampilkan user yang sudah dipilih atau user yang sedang login
+                                    if (!selectedUsers.includes(user.id) && user.id !== {{ auth()->id() }}) {
+                                        const avatar = user.avatar ? `/storage/${user.avatar}` : '{{ asset('default-image.jpg') }}';
+                                        html += `
+                                            <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer border-bottom pb-2" onclick="selectUser${modalType}(${user.id}, '${user.name}', '${user.username}')">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
+                                                    <div>
+                                                        <strong>${user.name}</strong><br>
+                                                        <small class="text-muted">@${user.username}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }
+                                });
+                            }
+                            resultsContainer.innerHTML = html;
+                        })
+                        .catch(err => {
+                            console.error('Error saat fetch:', err);
+                            resultsContainer.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
+                        });
                 });
 
-                // Perbarui nilai input hidden
-                collaboratorsInputCreate.value = selectedUsersCreate.join(',');
-            };
+                // Fungsi untuk menangani pemilihan user
+                window[`selectUser${modalType}`] = function(userId, name, username) {
+                    // Tambahkan user ke array jika belum ada
+                    if (!selectedUsers.includes(userId)) {
+                        selectedUsers.push(userId);
+
+                        // Tampilkan user yang dipilih
+                        const displayValue = `${name} (@${username})`;
+                        const collaboratorDiv = document.createElement('div');
+                        collaboratorDiv.className = 'd-flex align-items-center justify-content-between mb-2 p-2 bg-light rounded';
+                        collaboratorDiv.setAttribute('data-user-id', userId);
+                        collaboratorDiv.innerHTML = `
+                            <span>${displayValue}</span>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeUser${modalType}(${userId})">
+                                <i class="fas fa-times"></i> Hapus
+                            </button>
+                        `;
+                        selectedCollaboratorsDiv.appendChild(collaboratorDiv);
+
+                        // Perbarui nilai input hidden
+                        collaboratorsInput.value = selectedUsers.join(',');
+
+                        // Kosongkan hasil pencarian
+                        resultsContainer.innerHTML = '';
+                        searchInput.value = '';
+                    }
+                };
+
+                // Fungsi untuk menghapus user dari daftar
+                window[`removeUser${modalType}`] = function(userId) {
+                    // Hapus user dari array
+                    selectedUsers = selectedUsers.filter(id => id !== userId);
+
+                    // Hapus elemen DOM yang sesuai
+                    const collaboratorDiv = selectedCollaboratorsDiv.querySelector(`[data-user-id="${userId}"]`);
+                    if (collaboratorDiv) {
+                        collaboratorDiv.remove();
+                    }
+
+                    // Perbarui nilai input hidden
+                    collaboratorsInput.value = selectedUsers.join(',');
+                };
+
+                // Reset ketika modal dibuka
+                const modalElement = document.getElementById(searchInput.closest('.modal').id);
+                modalElement.addEventListener('shown.bs.modal', function() {
+                    selectedUsers = [];
+                    selectedCollaboratorsDiv.innerHTML = '';
+                    collaboratorsInput.value = '';
+                    searchInput.value = '';
+                    resultsContainer.innerHTML = '';
+                });
+            }
+
+            // Inisialisasi untuk Text Post Modal
+            initializeCollaboratorSearch('searchUsersText', 'selectedCollaboratorsText', 'collaboratorsInputCreateText', 'Text');
+
+            // Inisialisasi untuk Media Post Modal
+            initializeCollaboratorSearch('searchUsersMedia', 'selectedCollaboratorsMedia', 'collaboratorsInputCreateMedia', 'Media');
         });
     </script>
 @endpush

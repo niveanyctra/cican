@@ -15,7 +15,7 @@ class AccountController extends Controller
 {
     public function create()
     {
-        return view('auth.register'); // Tampilkan form registrasi
+        
     }
 
     public function store(Request $request)

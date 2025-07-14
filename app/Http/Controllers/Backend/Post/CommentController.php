@@ -70,8 +70,10 @@ class CommentController extends Controller
     public function mention(Request $request)
     {
         $query = $request->query('query');
+        $currentUserId = Auth::id();
 
         $users = User::where('username', 'like', "%{$query}%")
+            ->where('id', '!=', $currentUserId)
             ->limit(5)
             ->get(['username']);
 

@@ -218,9 +218,9 @@
             });
 
 
-            const commentInputIndex = document.getElementById('comment-input-modal-textee')
-            if (commentInputIndex) {
-                tribute.attach(commentInputIndex);
+            const commentInputModalTextee = document.getElementById('comment-input-modal-textee')
+            if (commentInputModalTextee) {
+                tribute.attach(commentInputModalTextee);
             }
         });
     </script>
@@ -246,9 +246,37 @@
             });
 
 
-            const commentInputModalTextee = document.getElementById('comment-input-index')
-            if (commentInputModalTextee) {
-                tribute.attach(commentInputModalTextee);
+            const commentInputIndexSnapee = document.getElementById('comment-input-index-snapee')
+            if (commentInputIndexSnapee) {
+                tribute.attach(commentInputIndexSnapee);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInputIndexTextee = document.getElementById('comment-input-index-textee')
+            if (commentInputIndexTextee) {
+                tribute.attach(commentInputIndexTextee);
             }
         });
     </script>

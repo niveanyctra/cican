@@ -1,18 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Dongle&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Dongle&display=swap");
+*{
+    font-family: "Dongle", sans-serif;
+}
 body {
     background-color: aqua;
-
 }
 
-.latar{
-    background-color: #E8E0D5;
+.latar {
+    background-color: #e8e0d5;
 }
 
-.navigasi{
-    background-color: #2A5286;
-    box-shadow: 
-        8px 0px 3px #bebebe;
+.navigasi {
+    background-color: #2a5286;
+    box-shadow: 8px 0px 3px #bebebe;
 }
 
 /* background post */
@@ -22,35 +22,37 @@ body {
     position: relative;
 } */
 
-.carousel-item{
+.carousel-item {
     max-height: 20%;
 }
 
 /* Tombol navbar */
-.nav-btn{
+.nav-btn {
     padding: 5px;
     font-family: "Dongle", sans-serif;
     font-weight: 400;
     font-size: 26px;
     font-style: normal;
 }
-.nav-btn:hover{
+.nav-btn:hover {
     transition: 0.5s;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     border-radius: 5px;
     transition-timing-function: ease-out;
 }
-.nav-btn a,.nav-btn button{
+.nav-btn a,
+.nav-btn button {
     color: white;
 }
-.nav-btn:last-child a{
-    color: #FF2627;
+.nav-btn:last-child a {
+    color: #ff2627;
 }
-.nav-btn a:hover,.nav-btn button:hover{
+.nav-btn a:hover,
+.nav-btn button:hover {
     color: black;
 }
-.nav-btn:last-child a:hover{
-    color: #FF2627;
+.nav-btn:last-child a:hover {
+    color: #ff2627;
 }
 /* Untuk semua ikon kecuali Logout */
 .nav-btn:not(:last-child) a:hover svg,
@@ -60,59 +62,49 @@ body {
 
 /* Untuk ikon Logout tetap merah saat di-hover */
 .nav-btn:last-child a:hover svg {
-    stroke: #FF2627;
+    stroke: #ff2627;
 }
 
-.search{
+.search {
     background-color: transparent;
     padding-bottom: 10px;
 }
 /* Semua element post */
 /* .mb-3{
-    
+
 } */
-.all-post{
+.all-post {
     font-family: "Dongle", sans-serif;
     font-size: 26px;
     font-style: normal;
     border: 10px;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     padding: 20px;
-    border-radius: 15px; 
-    box-shadow: 
-        5px 5px 3px #bebebe;
+    border-radius: 15px;
+    box-shadow: 5px 5px 3px #bebebe;
 }
-.all-user{
-    background-color: #F5F5F5;
+.all-user {
+    background-color: #f5f5f5;
     margin-left: 20px;
     padding-top: 10px;
     border-radius: 15px;
-    object-fit: cover; 
+    object-fit: cover;
     max-height: fit-content;
-    box-shadow: 
-        5px 5px 3px #bebebe;
+    box-shadow: 5px 5px 3px #bebebe;
 }
-.userhead{
-    padding: 2px;
-    text-align: center;
+.userhead {
+    font-size: 48px;
 }
-.userprof{
-    padding: 2px;
-}
-.card-body{
+.card-body {
     background-color: #f5faf5;
 }
-.searchbar{
+.searchbar {
     margin-bottom: 10px;
 }
 
-.caption-text{
-    padding: 5px;
-    padding-left: 48px;
-}
 /* border foto atau video */
 /* .post-media {
-    border: 4px solid #74b9ff; 
+    border: 4px solid #74b9ff;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
@@ -122,33 +114,31 @@ body {
     border-color: #0984e3;
 } */
 
-.sakti{
+.sakti {
     background-color: violet;
 }
 
 /* tampilan profile */
-.profile{
+.profile {
     background-color: transparent;
 }
-.profile-foto{
+.profile-foto {
     background-color: transparent;
 }
-.profile-status{
-    background-color: #F5F5F5;
+.profile-status {
+    background-color: #f5f5f5;
     border-radius: 10px;
     padding: 50px;
-    box-shadow: 
-        8px 8px 3px #bebebe;
-
+    box-shadow: 8px 8px 3px #bebebe;
 }
-.foto{
+.foto {
     background-color: white;
     padding: 12px;
     border-radius: 9px;
 }
 
-.follower{
-    background-color: #F5F5F5;
+.follower {
+    background-color: #f5f5f5;
     text-align: center;
     padding-top: 10px;
 }
@@ -156,5 +146,3 @@ body {
 .nav-btn a:hover img {
     filter: brightness(0%);
 }
-
-

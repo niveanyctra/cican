@@ -4,15 +4,15 @@
     @include('pages.post.show')
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
-        <div class="col-8 ms-5">
-            <div class="mb-3 px-32 w-100">
+        <div class="col-7 ms-5">
+            <div class="searchbar">
                 <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
                     <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off"
-                        style="border-radius: 10px">
+                        style="border-radius: 10px;">
                 </div>
             </div>
             @foreach ($posts as $post)
-                <div class="mb-3 px-32">
+                <div class="mb-3 align-items-center all-post">
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}" alt="Avatar"
@@ -61,38 +61,54 @@
                     <!-- Media (Gambar/Video) -->
 
                     <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
-                        <div class="carousel-inner">
-                            @foreach ($post->media as $index => $media)
-                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                    @if ($media->type === 'image')
-                                        <!-- Gambar -->
-                                        <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
-                                            class="d-block w-100 img-fluid">
-                                    @elseif ($media->type === 'video')
-                                        <!-- Video -->
-                                        <video controls class="d-block w-100 img-fluid" style="height: auto;">
-                                            <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
-                                            Browser Anda tidak mendukung elemen video.
-                                        </video>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
+                            <div class="carousel-inner rounded-xl items-center" style="background: black">
+                                <!-- Indikator Carousel -->
+                                @if ($post->media->count() > 1)
+                                    <div class="carousel-indicators">
+                                        @foreach ($post->media as $index => $media)
+                                            <button type="button" data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                                                data-bs-slide-to="{{ $index }}"
+                                                class="{{ $index === 0 ? 'active' : '' }}"
+                                                aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                                                aria-label="Slide {{ $index + 1 }}"></button>
+                                        @endforeach
+                                    </div>
+                                @endif
 
-                        <!-- Tombol Navigasi Carousel -->
-                        @if ($post->media->count() > 1)
-                            <button class="carousel-control-prev" type="button"
-                                data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        @endif
-                    </div>
+                                <!-- Item Media -->
+                                @foreach ($post->media as $index => $media)
+                                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                        <div class="d-flex justify-content-center h-100">
+                                            @if ($media->type === 'image')
+                                                <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
+                                                    class="img-fluid post-media"
+                                                    style="max-height: auto; max-width: auto; object-fit: contain;">
+                                            @elseif ($media->type === 'video')
+                                                <video controls class="w-100 post-media"
+                                                    style="max-height: auto; object-fit: contain;">
+                                                    <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
+                                                    Browser Anda tidak mendukung elemen video.
+                                                </video>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Tombol Navigasi Carousel -->
+                            @if ($post->media->count() > 1)
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            @endif
+                        </div>
 
 
                     @include('components.like-comments')
@@ -131,10 +147,10 @@
         </div>
 
         <!-- Sidebar Pengguna -->
-        <div class="col-3">
-            <h3 class="mb-3">All Users</h3>
+        <div class="col-4 all-user">
+            <h3 class="mb-3 userhead">All Users</h3>
             @foreach ($users as $user)
-                <div class="mb-3">
+                <div class="mb-3 userprof">
                     <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
                         <div class="card">
                             <div class="card-body">

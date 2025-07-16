@@ -4,15 +4,15 @@
     @include('pages.post.show')
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
-        <div class="col-8 ms-5">
-            <div class="mb-3 px-32 w-100">
+        <div class="col-7 ms-5">
+            <div class="searchbar">
                 <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
                     <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off"
                         style="border-radius: 10px">
                 </div>
             </div>
             @foreach ($posts as $post)
-                <div class="mb-3 px-32">
+                <div class="mb-3 align-items-center all-post">
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}" alt="Avatar"
@@ -60,7 +60,7 @@
 
                     <!-- Caption -->
                     <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
-                        <p class="mt-2">
+                        <p class="mt-2 caption-text">
                             @php
                                 $parsed = preg_replace_callback(
                                     '/@([\w]+)/',
@@ -76,28 +76,30 @@
                             {!! $parsed !!}
                         </p>
                     </div>
+<div style="padding-left: 28px;">
 
-                    @include('components.like-comments')
+    @include('components.like-comments')
+</div>
 
                     <!-- Form Komentar -->
-                    <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
+                    <!-- <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
                         @csrf
                         <textarea id="" name="body" class="form-control form-control-sm comment-input-textee" placeholder="Komentar . . ."
                             style="width: 500px" rows="2"></textarea>
 
                         <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
-                    </form>
+                    </form> -->
 
-                    <hr>
+                
                 </div>
             @endforeach
         </div>
 
         <!-- Sidebar Pengguna -->
-        <div class="col-3">
-            <h3 class="mb-3">All Users</h3>
+        <div class="col-4 all-user">
+            <h3 class="mb-3 userhead">All Users</h3>
             @foreach ($users as $user)
-                <div class="mb-3">
+                <div class="mb-3 userprof">
                     <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
                         <div class="card">
                             <div class="card-body">

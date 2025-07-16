@@ -87,7 +87,7 @@
         <!-- Toggle Panel -->
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
-                <h1>Hello, Welcome!</h1>
+                <h1>Welcome, NARSEES!</h1>
                 <p>Don't have an account yet?</p>
                 <button class="btn register-btn">Register</button>
             </div>

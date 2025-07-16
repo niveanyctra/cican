@@ -12,20 +12,19 @@
 @section('content')
     @include('pages.post.edit')
     @include('pages.post.show')
-    <div class="container px-40">
+    <div class="profile-status">
         <!-- Header Profil -->
-        <div class="d-flex align-items-start mb-4">
+        <div class="d-flex foto">
             <!-- Avatar -->
-            <div class="me-4 profile">
+            <div class="me-4 profile-foto">
                 <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
-                    class="rounded-circle" style="object-fit: cover; width: 70px; height: 70px;">
+                    class="rounded-3" style="object-fit: cover; width: 200px; height: 200px;">
             </div>
 
             <!-- Informasi Profil -->
             <div class="flex-grow-1">
                 <div class="d-flex gap-4 align-items-center">
-                    <h5>{{ $user->username }}</h5>
-
+                    <h2 class="fw-bold fs-1 pe-5 mb-2">{{ $user->username }}</h2>
                     @auth
                         @if ($user->id !== auth()->id())
                             <button
@@ -41,20 +40,20 @@
                     @endauth
                 </div>
 
-                <span class="fw-bold">{{ $user->name }}</span>
+                <span class="">{{ $user->name }}</span>
                 <p>{{ $user->bio ?? '' }}</p>
-                <div>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#followersModal">
-                        <strong>{{ $user->followers->count() }}</strong> Followers
-                    </a>
-                    |
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#followingsModal">
-                        <strong>{{ $user->followings->count() }}</strong> Following
-                    </a>
-                </div>
+                
             </div>
         </div>
-
+<div class="follower">
+    <a class="pe-5" href="#" data-bs-toggle="modal" data-bs-target="#followersModal">
+        <strong>{{ $user->followers->count() }}</strong> Followers
+    </a>
+                    |
+    <a class="ps-5" href="#" data-bs-toggle="modal" data-bs-target="#followingsModal">
+        <strong>{{ $user->followings->count() }}</strong> Following
+    </a>
+</div>
         <hr class="my-3">
         <!-- Tab Navigation -->
         <ul class="nav nav-tabs mb-4 justify-between" id="profileTab" role="tablist">
@@ -76,7 +75,7 @@
         <div class="tab-content" id="profileTabContent">
             <!-- Snapee Tab -->
             <div class="tab-pane fade show active" id="snapee" role="tabpanel" aria-labelledby="snapee-tab">
-                <div class="row gap-0">
+                <div class="row gap-0 ps-3">
                     @foreach ($posts as $post)
                         @if ($post->media->isNotEmpty())
                             <div class="col-4 p-0">

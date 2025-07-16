@@ -1,4 +1,4 @@
-<div id="like-section-feed-{{ $post->id }}" class="my-2 ms-3 d-flex" style="cursor: pointer;">
+<div id="like-section-feed-{{ $post->id }}" class="my-2 ms-3 d-flex gap-5" style="cursor: pointer;">
     <div class="d-flex gap-1">
         <button id="like-button-feed-{{ $post->id }}" onclick="toggleLike({{ $post->id }})">
             <!-- Ikon Like -->

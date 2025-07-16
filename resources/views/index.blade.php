@@ -18,7 +18,7 @@
     @include('pages.post.show')
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
-        <div class="col-7">
+        <div class="col-7 ms-5">
             <!-- Search bar -->
             <div class="rounded-circle w-100 search">
                 <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             @foreach ($posts as $post)
-                <div class="mb-3 pe-5 align-items-center ">
+                <div class="mb-3 align-items-center all-post">
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}" alt="Avatar"
@@ -128,7 +128,7 @@
 
                         <!-- Caption -->
                         <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
-                            <p class="mt-2">
+                            <p class="mt-2 caption-text">
                                 @php
                                     $parsed1 = preg_replace_callback(
                                         '/@([\w]+)/',
@@ -183,9 +183,9 @@
 
         <!-- Sidebar Pengguna -->
         <div class="col-4 all-user">
-            <h3 class="mb-3">All Users</h3>
+            <h3 class="mb-3 userhead">All Users</h3>
             @foreach ($users as $user)
-                <div class="mb-3">
+                <div class="mb-3 userprof">
                     <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
                         <div class="card">
                             <div class="card-body">

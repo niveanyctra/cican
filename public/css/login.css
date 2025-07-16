@@ -113,6 +113,7 @@ form{ width: 100%; }
     color: #2A5286;
 }
 
+
 .social-icons{
     display: flex;
     justify-content: center;
@@ -171,9 +172,9 @@ form{ width: 100%; }
         }
 
         .toggle-panel.toggle-right{
-        right: -50%;
-        transition-delay: .6s;
-    }
+            right: -50%;
+            transition-delay: .6s;
+        }
         .container.active .toggle-panel.toggle-right{
             right: 0%;
             transition-delay: 1.2s;
@@ -194,6 +195,14 @@ form{ width: 100%; }
 }
 .btn.register-btn:hover{
     background-color: #2A5286;
+    color: #f5fafa;
+}
+.btn.login-btn{
+    background-color: #f5fafa;
+    color: #2A5286;
+}
+.login-btn:hover{
+    background-color:#2A5286;
     color: #f5fafa;
 }
 

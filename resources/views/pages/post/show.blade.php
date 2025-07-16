@@ -20,14 +20,14 @@
                         <div class="modal-body">
                             <div class="d-flex">
                                 <!-- Media (Gambar/Video) -->
-                                <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
+                                <div id="modalMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
                                     <div class="carousel-inner show-post items-center" style="background: black">
                                         <!-- Indikator Carousel -->
                                         @if ($post->media->count() > 1)
                                             <div class="carousel-indicators">
                                                 @foreach ($post->media as $index => $media)
                                                     <button type="button"
-                                                        data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                                                        data-bs-target="#modalMediaCarousel-{{ $post->id }}"
                                                         data-bs-slide-to="{{ $index }}"
                                                         class="{{ $index === 0 ? 'active' : '' }}"
                                                         aria-current="{{ $index === 0 ? 'true' : 'false' }}"
@@ -60,13 +60,13 @@
                                     <!-- Tombol Navigasi Carousel -->
                                     @if ($post->media->count() > 1)
                                         <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                                            data-bs-target="#modalMediaCarousel-{{ $post->id }}"
                                             data-bs-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Previous</span>
                                         </button>
                                         <button class="carousel-control-next" type="button"
-                                            data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                                            data-bs-target="#modalMediaCarousel-{{ $post->id }}"
                                             data-bs-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Next</span>
@@ -179,7 +179,7 @@
                                         <form action="{{ route('comments.store', $post->id) }}" method="POST"
                                             class="d-flex">
                                             @csrf
-                                            <input type="text" id="comment-input-modal"
+                                            <input type="text" id="comment-input-modal-{{ $post->id }}"
                                                 class="form-control form-control-sm" name="body"
                                                 placeholder="Komentar . . ." style="width: 100%; resize: none;">
                                             <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
@@ -306,7 +306,7 @@
                                         <form action="{{ route('comments.store', $post->id) }}" method="POST"
                                             class="d-flex">
                                             @csrf
-                                            <input type="text" id="comment-input-modal-textee"
+                                            <input type="text" id="comment-input-modal-text-{{ $post->id }}"
                                                 class="form-control form-control-sm" name="body"
                                                 placeholder="Komentar . . ." style="width: 100%; resize: none;">
                                             <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">

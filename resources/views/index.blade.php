@@ -2,7 +2,7 @@
 @push('styles')
     <style>
         .carousel-item {
-            height: 80vh;
+            height: 70vh;
             /* Tetapkan tinggi container */
             min-height: 500px;
             /* Tinggi minimum untuk mobile */

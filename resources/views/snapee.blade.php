@@ -1,4 +1,18 @@
 @extends('layouts.app')
+@push('styles')
+    <style>
+        .carousel-item {
+            height: 70vh;
+            /* Tetapkan tinggi container */
+            min-height: 500px;
+            /* Tinggi minimum untuk mobile */
+        }
+
+        .carousel-inner .d-flex {
+            height: 100%;
+        }
+    </style>
+@endpush
 @section('content')
     @include('pages.post.edit')
     @include('pages.post.show')

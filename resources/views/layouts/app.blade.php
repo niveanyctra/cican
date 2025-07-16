@@ -25,7 +25,7 @@
         }
     </style>
     @stack('styles')
-</head>  
+</head>
 
 <body class="flex flex-col bg-gray-100 min-h-screen">
     @auth
@@ -257,34 +257,39 @@
             }
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tribute = new Tribute({
-                trigger: "@",
-                values: async (text, cb) => {
-                    if (text.length >= 2) {
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tribute = new Tribute({
+            trigger: "@",
+            values: async (text, cb) => {
+                if (text.length >= 2) {
+                    try {
                         const res = await fetch(`/mention/users?query=${text}`);
                         const users = await res.json();
                         cb(users.map(user => ({
                             key: user.username,
                             value: user.username
                         })));
-                    } else {
+                    } catch (error) {
+                        console.error('Error fetching mention users:', error);
                         cb([]);
                     }
-                },
-                selectTemplate: function(item) {
-                    return `@${item.original.key}`;
+                } else {
+                    cb([]);
                 }
-            });
-
-
-            const commentInputIndexTextee = document.getElementsByClassName('comment-input-index-textee')
-            if (commentInputIndexTextee) {
-                tribute.attach(commentInputIndexTextee);
+            },
+            selectTemplate: function (item) {
+                return `@${item.original.key}`;
             }
         });
-    </script>
+
+        const commentInputs = document.querySelectorAll('.comment-input');
+        commentInputs.forEach(input => {
+            tribute.attach(input);
+        });
+    });
+</script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tribute = new Tribute({

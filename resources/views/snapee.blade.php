@@ -5,10 +5,10 @@
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
         <div class="col-7 ms-5">
-            <div class="searchbar">
+            <div class="rounded-circle w-100 search">
                 <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
                     <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off"
-                        style="border-radius: 10px;">
+                        style="border-radius: 20px; font-size: 38px;">
                 </div>
             </div>
             @foreach ($posts as $post)
@@ -16,22 +16,23 @@
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}" alt="Avatar"
-                            style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
-                        <a href="{{ route('user.show', $post->user->username) }}"
-                            class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
+                            style="object-fit: cover; width: 42px; height: 42px;" class="rounded-circle me-2">
+                        <a href="{{ route('user.show', $post->user->username) }}" class="text-decoration-none"
+                            style="font-size: 38px; font-weight: 400">{{ $post->user->username }}</a>
 
                         <!-- Tampilkan Collaborator -->
                         @if ($post->collaborators->count() > 0)
                             <span class="mx-1">&</span>
                             <a href="{{ route('user.show', $post->collaborators->first()->username) }}"
-                                class="text-decoration-none text-dark fw-bold">{{ $post->collaborators->first()->username }}</a>
+                                class="text-decoration-none"
+                                style="font-size: 38px; font-weight: 400">{{ $post->collaborators->first()->username }}</a>
                             @if ($post->collaborators->count() > 1)
                                 <span class="text-muted">+{{ $post->collaborators->count() - 1 }}</span>
                             @endif
                         @endif
 
                         <span class="mx-1">•</span>
-                        <span class="text-muted">{{ $post->created_at->diffForHumans() }}</span>
+                        <span class="text-muted" style="font-size: 32px">{{ $post->created_at->diffForHumans() }}</span>
 
                         <!-- Menu Titik Tiga untuk Edit/Hapus -->
                         @if ($post->user_id === auth()->id())
@@ -58,64 +59,61 @@
                         @endif
                     </div>
 
-                    <!-- Media (Gambar/Video) -->
-
                     <div id="postMediaCarousel-{{ $post->id }}" class="carousel slide mt-2">
-                            <div class="carousel-inner rounded-xl items-center" style="background: black">
-                                <!-- Indikator Carousel -->
-                                @if ($post->media->count() > 1)
-                                    <div class="carousel-indicators">
-                                        @foreach ($post->media as $index => $media)
-                                            <button type="button" data-bs-target="#postMediaCarousel-{{ $post->id }}"
-                                                data-bs-slide-to="{{ $index }}"
-                                                class="{{ $index === 0 ? 'active' : '' }}"
-                                                aria-current="{{ $index === 0 ? 'true' : 'false' }}"
-                                                aria-label="Slide {{ $index + 1 }}"></button>
-                                        @endforeach
-                                    </div>
-                                @endif
-
-                                <!-- Item Media -->
-                                @foreach ($post->media as $index => $media)
-                                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                        <div class="d-flex justify-content-center h-100">
-                                            @if ($media->type === 'image')
-                                                <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
-                                                    class="img-fluid post-media"
-                                                    style="max-height: auto; max-width: auto; object-fit: contain;">
-                                            @elseif ($media->type === 'video')
-                                                <video controls class="w-100 post-media"
-                                                    style="max-height: auto; object-fit: contain;">
-                                                    <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
-                                                    Browser Anda tidak mendukung elemen video.
-                                                </video>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <!-- Tombol Navigasi Carousel -->
+                        <div class="carousel-inner rounded-xl items-center" style="background: black">
+                            <!-- Indikator Carousel -->
                             @if ($post->media->count() > 1)
-                                <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button"
-                                    data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
+                                <div class="carousel-indicators">
+                                    @foreach ($post->media as $index => $media)
+                                        <button type="button" data-bs-target="#postMediaCarousel-{{ $post->id }}"
+                                            data-bs-slide-to="{{ $index }}"
+                                            class="{{ $index === 0 ? 'active' : '' }}"
+                                            aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                                            aria-label="Slide {{ $index + 1 }}"></button>
+                                    @endforeach
+                                </div>
                             @endif
+
+                            <!-- Item Media -->
+                            @foreach ($post->media as $index => $media)
+                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                    <div class="d-flex justify-content-center h-100">
+                                        @if ($media->type === 'image')
+                                            <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
+                                                class="img-fluid post-media"
+                                                style="max-height: auto; max-width: auto; object-fit: contain;">
+                                        @elseif ($media->type === 'video')
+                                            <video controls class="w-100 post-media"
+                                                style="max-height: auto; object-fit: contain;">
+                                                <source src="{{ Storage::url($media->file_url) }}" type="video/mp4">
+                                                Browser Anda tidak mendukung elemen video.
+                                            </video>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
 
+                        <!-- Tombol Navigasi Carousel -->
+                        @if ($post->media->count() > 1)
+                            <button class="carousel-control-prev" type="button"
+                                data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                data-bs-target="#postMediaCarousel-{{ $post->id }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        @endif
+                    </div>
 
                     @include('components.like-comments')
 
                     <!-- Caption -->
                     <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
-                        <p class="mt-2">
+                        <p class="caption-text" style="font-size: 32px">
                             @php
                                 $parsed = preg_replace_callback(
                                     '/@([\w]+)/',
@@ -127,47 +125,33 @@
                                     e($post->caption),
                                 );
                             @endphp
-
                             {!! $parsed !!}
                         </p>
                     </div>
-
-                    <!-- Form Komentar -->
-                    <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
-                        @csrf
-                        <textarea id="" name="body" class="form-control form-control-sm comment-input-snapee" placeholder="Komentar . . ."
-                            style="width: 500px" rows="2"></textarea>
-
-                        <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
-                    </form>
-
-                    <hr>
                 </div>
             @endforeach
         </div>
 
         <!-- Sidebar Pengguna -->
         <div class="col-4 all-user">
-            <h3 class="mb-3 userhead">All Users</h3>
-            @foreach ($users as $user)
-                <div class="mb-3 userprof">
-                    <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}"
-                                        alt="Avatar" style="object-fit: cover; width: 40px; height: 40px;"
-                                        class="rounded-circle me-2">
-                                    <div>
-                                        <strong>{{ $user->username }}</strong> <br>
-                                        <small style="font-size: 13px">{{ $user->name }}</small>
-                                    </div>
+            <p class="userhead ms-3">Friends</p>
+            <hr>
+            <div class="mx-4">
+                @foreach ($users as $user)
+                    <div class="my-4">
+                        <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
+                                    style="object-fit: cover; width: 42px; height: 42px;" class="rounded-circle me-2">
+                                <div style="line-height: 15px">
+                                    <p style="font-size: 36px">{{ $user->name }}</p> <br>
+                                    <p style="font-size: 32px; opacity: 50%;">{{ '@' . $user->username }}</p>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+                        </a>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
     @stack('modal')

@@ -5,10 +5,11 @@
     <div class="row">
         <!-- Kolom Utama (Feed Postingan) -->
         <div class="col-7 ms-5">
-            <div class="searchbar">
+            <!-- Search bar -->
+            <div class="rounded-circle w-100 search">
                 <div class="d-flex" data-bs-toggle="modal" data-bs-target="#searchModal">
                     <input type="text" class="form-control" placeholder="Search" class="form-control" autocomplete="off"
-                        style="border-radius: 10px">
+                        style="border-radius: 20px; font-size: 38px;">
                 </div>
             </div>
             @foreach ($posts as $post)
@@ -16,22 +17,23 @@
                     <!-- Avatar dan Username -->
                     <div class="d-flex align-items-center profile">
                         <img src="{{ Storage::url($post->user->avatar ?? 'default-image.jpg') }}" alt="Avatar"
-                            style="object-fit: cover; width: 40px; height: 40px;" class="rounded-circle me-2">
-                        <a href="{{ route('user.show', $post->user->username) }}"
-                            class="text-decoration-none text-dark fw-bold">{{ $post->user->username }}</a>
+                            style="object-fit: cover; width: 42px; height: 42px;" class="rounded-circle me-2">
+                        <a href="{{ route('user.show', $post->user->username) }}" class="text-decoration-none"
+                            style="font-size: 38px; font-weight: 400">{{ $post->user->username }}</a>
 
                         <!-- Tampilkan Collaborator -->
                         @if ($post->collaborators->count() > 0)
                             <span class="mx-1">&</span>
                             <a href="{{ route('user.show', $post->collaborators->first()->username) }}"
-                                class="text-decoration-none text-dark fw-bold">{{ $post->collaborators->first()->username }}</a>
+                                class="text-decoration-none"
+                                style="font-size: 38px; font-weight: 400">{{ $post->collaborators->first()->username }}</a>
                             @if ($post->collaborators->count() > 1)
                                 <span class="text-muted">+{{ $post->collaborators->count() - 1 }}</span>
                             @endif
                         @endif
 
                         <span class="mx-1">•</span>
-                        <span class="text-muted">{{ $post->created_at->diffForHumans() }}</span>
+                        <span class="text-muted" style="font-size: 32px">{{ $post->created_at->diffForHumans() }}</span>
 
                         <!-- Menu Titik Tiga untuk Edit/Hapus -->
                         @if ($post->user_id === auth()->id())
@@ -60,7 +62,7 @@
 
                     <!-- Caption -->
                     <div data-bs-toggle="modal" data-bs-target="#showPostModal{{ $post->id }}">
-                        <p class="mt-2 caption-text">
+                        <p class="caption-text ps-5" style="font-size: 32px">
                             @php
                                 $parsed = preg_replace_callback(
                                     '/@([\w]+)/',
@@ -72,51 +74,36 @@
                                     e($post->caption),
                                 );
                             @endphp
-
                             {!! $parsed !!}
                         </p>
                     </div>
-<div style="padding-left: 28px;">
-
-    @include('components.like-comments')
-</div>
-
-                    <!-- Form Komentar -->
-                    <!-- <form action="{{ route('comments.store', $post->id) }}" method="POST" class="d-flex">
-                        @csrf
-                        <textarea id="" name="body" class="form-control form-control-sm comment-input-textee" placeholder="Komentar . . ."
-                            style="width: 500px" rows="2"></textarea>
-
-                        <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
-                    </form> -->
-
-                
+                    <div class="ps-5">
+                        @include('components.like-comments')
+                    </div>
                 </div>
             @endforeach
         </div>
 
         <!-- Sidebar Pengguna -->
         <div class="col-4 all-user">
-            <h3 class="mb-3 userhead">All Users</h3>
-            @foreach ($users as $user)
-                <div class="mb-3 userprof">
-                    <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}"
-                                        alt="Avatar" style="object-fit: cover; width: 40px; height: 40px;"
-                                        class="rounded-circle me-2">
-                                    <div>
-                                        <strong>{{ $user->username }}</strong> <br>
-                                        <small style="font-size: 13px">{{ $user->name }}</small>
-                                    </div>
+            <p class="userhead ms-3">Friends</p>
+            <hr>
+            <div class="mx-4">
+                @foreach ($users as $user)
+                    <div class="my-4">
+                        <a href="{{ route('user.show', $user->username) }}" class="text-decoration-none text-dark">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ Storage::url($user->avatar ?? asset('default-image.jpg')) }}" alt="Avatar"
+                                    style="object-fit: cover; width: 42px; height: 42px;" class="rounded-circle me-2">
+                                <div style="line-height: 15px">
+                                    <p style="font-size: 36px">{{ $user->name }}</p> <br>
+                                    <p style="font-size: 32px; opacity: 50%;">{{ '@' . $user->username }}</p>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+                        </a>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
     @stack('modal')

@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Dongle&display=swap");
-*{
+@font-face {
+    font-family: "QurovaDEMO";
+    src: url("/assets/fonts/QurovaDEMO-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+* {
     font-family: "Dongle", sans-serif;
 }
 body {
@@ -26,43 +32,134 @@ body {
     max-height: 20%;
 }
 
-/* Tombol navbar */
-.nav-btn {
-    padding: 5px;
-    font-family: "Dongle", sans-serif;
-    font-weight: 400;
-    font-size: 26px;
-    font-style: normal;
-}
-.nav-btn:hover {
-    transition: 0.5s;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    transition-timing-function: ease-out;
-}
-.nav-btn a,
-.nav-btn button {
+/* Styling untuk brand/logo */
+.navigasi p {
+    font-family: 'QurovaDEMO', sans-serif;
+    font-size: 54px;
     color: white;
 }
-.nav-btn:last-child a {
-    color: #ff2627;
+
+/* Styling untuk navigation buttons */
+.nav-btn {
+    display: flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    width: 100%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
 }
-.nav-btn a:hover,
-.nav-btn button:hover {
+
+/* Styling untuk span text dalam nav-btn */
+.nav-btn span {
+    font-size: 25px;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+/* Styling untuk gambar dan SVG dalam nav-btn */
+.nav-btn img,
+.nav-btn svg {
+    width: 15px;
+    height: 15px;
+    transition: filter 0.3s ease;
+}
+
+/* Hover effect untuk nav-btn (kecuali logout) */
+.nav-btn:hover:not(.logout-btn) {
+    background-color: white;
     color: black;
 }
-.nav-btn:last-child a:hover {
-    color: #ff2627;
+
+.nav-btn:hover:not(.logout-btn) span {
+    color: black;
 }
-/* Untuk semua ikon kecuali Logout */
-.nav-btn:not(:last-child) a:hover svg,
-.nav-btn:not(:last-child) button:hover svg {
+
+.nav-btn:hover:not(.logout-btn) img {
+    filter: brightness(0); /* Mengubah gambar menjadi hitam */
+}
+
+.nav-btn:hover:not(.logout-btn) svg {
+    color: black;
     stroke: black;
 }
 
-/* Untuk ikon Logout tetap merah saat di-hover */
-.nav-btn:last-child a:hover svg {
-    stroke: #ff2627;
+/* Active state untuk nav-btn (kecuali logout) */
+.nav-btn.active:not(.logout-btn) {
+    background-color: white;
+    color: black;
+}
+
+.nav-btn.active:not(.logout-btn) span {
+    color: black;
+}
+
+.nav-btn.active:not(.logout-btn) img {
+    filter: brightness(0); /* Mengubah gambar menjadi hitam */
+}
+
+.nav-btn.active:not(.logout-btn) svg {
+    color: black;
+    stroke: black;
+}
+
+/* Styling khusus untuk logout button */
+.logout-btn {
+    color: #FF2627;
+}
+
+.logout-btn span {
+    color: #FF2627;
+    font-size: 25px;
+}
+
+.logout-btn img {
+    width: 15px;
+    height: 15px;
+}
+
+/* Hover effect untuk logout button */
+.logout-btn:hover {
+    background-color: rgba(255, 38, 39, 0.1);
+    color: #FF2627;
+}
+
+.logout-btn:hover span {
+    color: #FF2627;
+}
+
+.logout-btn:hover svg {
+    stroke: #FF2627;
+    fill: #FF2627;
+}
+
+/* Styling untuk space between items */
+.tombol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tombol li {
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .nav-btn span {
+        font-size: 35px;
+    }
+
+    .nav-btn img,
+    .nav-btn svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 .search {

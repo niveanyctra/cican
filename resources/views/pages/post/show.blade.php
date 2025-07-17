@@ -180,7 +180,7 @@
                                             class="d-flex">
                                             @csrf
                                             <input type="text" id="comment-input-modal-{{ $post->id }}"
-                                                class="form-control form-control-sm" name="body"
+                                                class="form-control form-control-sm comment-input" name="body"
                                                 placeholder="Komentar . . ." style="width: 100%; resize: none;">
                                             <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                                         </form>
@@ -307,7 +307,7 @@
                                             class="d-flex">
                                             @csrf
                                             <input type="text" id="comment-input-modal-text-{{ $post->id }}"
-                                                class="form-control form-control-sm" name="body"
+                                                class="form-control form-control-sm comment-input" name="body"
                                                 placeholder="Komentar . . ." style="width: 100%; resize: none;">
                                             <input type="submit" value="Kirim" class="btn btn-sm btn-primary ms-2">
                                         </form>

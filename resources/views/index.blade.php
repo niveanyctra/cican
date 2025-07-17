@@ -54,7 +54,7 @@
                             <div class="dropdown ms-auto">
                                 <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    <i class="fa-solid fa-ellipsis-vertical" style="color: black"></i>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>

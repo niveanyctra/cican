@@ -131,7 +131,7 @@
                 <div class="d-flex flex-column gap-3">
                     @foreach ($posts as $post)
                         @if ($post->media->isEmpty())
-                            <div class="card border-0">
+                            <div class="card">
                                 <div class="card-body">
                                     <!-- Profil dan Caption -->
                                     <div class="gap-2">
@@ -165,22 +165,24 @@
                                                 <div class="dropdown ms-auto">
                                                     <button class="btn btn-link p-0" type="button"
                                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                        <i class="fa-solid fa-ellipsis-vertical" style="color: black"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li>
                                                             <button type="button" class="dropdown-item"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#editPostModal{{ $post->id }}">
+                                                                data-bs-target="#editPostModal{{ $post->id }}"
+                                                                style="font-size: 25px">
                                                                 Edit
                                                             </button>
                                                         </li>
+                                                        <hr>
                                                         <li>
                                                             <form action="{{ route('posts.destroy', $post->id) }}"
                                                                 method="GET">
                                                                 @csrf
-                                                                <button type="submit"
-                                                                    class="dropdown-item text-danger">Hapus</button>
+                                                                <button type="submit" class="dropdown-item text-danger"
+                                                                    style="font-size: 25px">Delete</button>
                                                             </form>
                                                         </li>
                                                     </ul>

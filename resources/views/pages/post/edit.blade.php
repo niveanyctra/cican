@@ -14,60 +14,62 @@
 
                         <div class="modal-body">
                             <div class="d-flex">
-                                <!-- Media (Gambar/Video) -->
-                                <div id="modalMediaEditCarousel-{{ $post->id }}" class="carousel slide mt-2">
-                                    <div class="carousel-inner show-post items-center" style="background: black">
-                                        <!-- Indikator Carousel -->
-                                        @if ($post->media->count() > 1)
-                                            <div class="carousel-indicators">
-                                                @foreach ($post->media as $index => $media)
-                                                    <button type="button"
-                                                        data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
-                                                        data-bs-slide-to="{{ $index }}"
-                                                        class="{{ $index === 0 ? 'active' : '' }}"
-                                                        aria-current="{{ $index === 0 ? 'true' : 'false' }}"
-                                                        aria-label="Slide {{ $index + 1 }}"></button>
-                                                @endforeach
-                                            </div>
-                                        @endif
-
-                                        <!-- Item Media -->
-                                        @foreach ($post->media as $index => $media)
-                                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                <div class="d-flex justify-content-center align-items-center h-100">
-                                                    @if ($media->type === 'image')
-                                                        <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
-                                                            class="img-fluid"
-                                                            style="max-height: 70vh; width: 100%; object-fit: contain;">
-                                                    @elseif ($media->type === 'video')
-                                                        <video controls class="w-100"
-                                                            style="max-height: 70vh; object-fit: contain;">
-                                                            <source src="{{ Storage::url($media->file_url) }}"
-                                                                type="video/mp4">
-                                                            Browser Anda tidak mendukung elemen video.
-                                                        </video>
-                                                    @endif
+                                @if ($post->media->isNotEmpty())
+                                    <!-- Media (Gambar/Video) -->
+                                    <div id="modalMediaEditCarousel-{{ $post->id }}" class="carousel slide mt-2">
+                                        <div class="carousel-inner show-post items-center" style="background: black">
+                                            <!-- Indikator Carousel -->
+                                            @if ($post->media->count() > 1)
+                                                <div class="carousel-indicators">
+                                                    @foreach ($post->media as $index => $media)
+                                                        <button type="button"
+                                                            data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
+                                                            data-bs-slide-to="{{ $index }}"
+                                                            class="{{ $index === 0 ? 'active' : '' }}"
+                                                            aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                                                            aria-label="Slide {{ $index + 1 }}"></button>
+                                                    @endforeach
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                            @endif
 
-                                    <!-- Tombol Navigasi Carousel -->
-                                    @if ($post->media->count() > 1)
-                                        <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
-                                            data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button"
-                                            data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
-                                            data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
-                                    @endif
-                                </div>
+                                            <!-- Item Media -->
+                                            @foreach ($post->media as $index => $media)
+                                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                                    <div class="d-flex justify-content-center align-items-center h-100">
+                                                        @if ($media->type === 'image')
+                                                            <img src="{{ Storage::url($media->file_url) }}"
+                                                                alt="Post Image" class="img-fluid"
+                                                                style="max-height: 70vh; width: 100%; object-fit: contain;">
+                                                        @elseif ($media->type === 'video')
+                                                            <video controls class="w-100"
+                                                                style="max-height: 70vh; object-fit: contain;">
+                                                                <source src="{{ Storage::url($media->file_url) }}"
+                                                                    type="video/mp4">
+                                                                Browser Anda tidak mendukung elemen video.
+                                                            </video>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                        <!-- Tombol Navigasi Carousel -->
+                                        @if ($post->media->count() > 1)
+                                            <button class="carousel-control-prev" type="button"
+                                                data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
+                                                data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
+                                                data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        @endif
+                                    </div>
+                                @endif
                                 <div class="w-100 ms-3">
                                     <!-- Caption -->
                                     <div class="mb-3">
@@ -116,7 +118,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="reset" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 25px;">Cancel</button>
+                            <button type="reset" class="btn btn-danger" data-bs-dismiss="modal"
+                                style="font-size: 25px;">Cancel</button>
                             <button type="submit" class="btn btn-info" style="font-size: 25px;">Save Changes</button>
                         </div>
                     </form>

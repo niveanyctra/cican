@@ -23,10 +23,10 @@
                         @auth
                             @if ($following->id !== auth()->id())
                                 @if (auth()->user()->followings->contains($following->id))
-                                    <button class="btn btn-sm btn-outline-secondary follow-btn"
+                                    <button class="btn btn-sm btn-secondary follow-btn"
                                         data-user-id="{{ $following->id }}" style="font-size: 25px">Unfollow</button>
                                 @else
-                                    <button class="btn btn-sm btn-outline-primary follow-btn"
+                                    <button class="btn btn-sm btn-primary follow-btn"
                                         data-user-id="{{ $following->id }}" style="font-size: 25px">Follow</button>
                                 @endif
                             @endif

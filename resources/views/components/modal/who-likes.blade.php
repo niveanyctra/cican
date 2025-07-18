@@ -19,7 +19,7 @@
                                         <img src="{{ Storage::url($like->avatar ?? 'default-image.jpg') }}"
                                             alt="Avatar" style="object-fit: cover; width: 50px; height: 50px;"
                                             class="rounded-circle me-2">
-                                        <div style="line-height: 10px">
+                                        <div style="line-height: 12px">
                                             <p style="font-size: 30px">{{ $like->name }}</p> <br>
                                             <p style="font-size: 25px; opacity: 50%;">{{ '@' . $like->username }}</p>
                                         </div>

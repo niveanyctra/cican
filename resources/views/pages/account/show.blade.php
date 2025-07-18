@@ -29,7 +29,7 @@
                         @if ($user->id !== auth()->id())
                             <button
                                 class="btn follow-btn {{ auth()->user()->followings->contains($user->id) ? 'btn-secondary' : 'btn-primary' }}"
-                                data-user-id="{{ $user->id }}">
+                                data-user-id="{{ $user->id }}" style="font-size: 25px">
                                 {{ auth()->user()->followings->contains($user->id) ? 'Unfollow' : 'Follow' }}
                             </button>
                         @else

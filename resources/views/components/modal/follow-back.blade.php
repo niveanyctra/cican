@@ -16,14 +16,17 @@
                                 style="object-fit: cover; width: 50px; height: 50px;" class="rounded-circle me-2">
                             <div style="line-height: 12px">
                                 <p style="font-size: 30px">{{ $follower->name }}</p> <br>
-                                <p style="font-size: 25px; opacity: 50%;">{{ '@' . $follower->username }}</p>
+                                <p style="font-size: 25px; opacity: 50%;">{{ "@{$follower->username}" }}</p>
                             </div>
                         </a>
 
                         @auth
                             @if ($follower->id !== auth()->id())
-                                <button class="btn btn-sm btn-primary follow-btn w-40" data-user-id="{{ $follower->id }}"
-                                    style="font-size: 20px">Follow Back</button>
+                            <button
+                                class="btn btn-sm btn-primary follow-btn w-40"
+                                data-user-id="{{ $follower->id }}" style="font-size: 20px">
+                                {{ auth()->user()->followings->contains($follower->id) ? 'Unfollow' : 'Follow Back' }}
+                            </button>
                             @endif
                         @endauth
                     </div>
@@ -32,3 +35,33 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function(e) {
+                if (e.target.classList.contains('follow-btn')) {
+                    const button = e.target;
+                    const userId = button.dataset.userId;
+                    fetch(`/follow/follow-toggle/${userId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Refresh page after follow/unfollow
+                            window.location.reload();
+                        })
+                        .catch(error => {
+                            console.error('Gagal toggle follow:', error);
+                        });
+                }
+            });
+        });
+    </script>
+
+@endpush

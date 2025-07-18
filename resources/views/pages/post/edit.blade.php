@@ -2,57 +2,122 @@
     @foreach ($posts as $post)
         <div class="modal fade" id="editPostModal{{ $post->id }}" tabindex="-1" aria-labelledby="editPostModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editPostModalLabel">Edit Postingan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="d-flex w-100 justify-content-center pt-2">
+                            <p style="font-size: 50px; line-height: 10px;">Edit Posts</p>
+                        </div>
                     </div>
                     <form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="modal-body">
-                            <!-- Caption -->
-                            <div class="mb-3">
-                                <label for="caption{{ $post->id }}" class="form-label">Caption</label>
-                                <textarea name="caption" id="caption{{ $post->id }}" class="form-control @error('caption') is-invalid @enderror"
-                                    rows="3">{{ old('caption', $post->caption) }}</textarea>
-                                @error('caption')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <div class="d-flex">
+                                <!-- Media (Gambar/Video) -->
+                                <div id="modalMediaEditCarousel-{{ $post->id }}" class="carousel slide mt-2">
+                                    <div class="carousel-inner show-post items-center" style="background: black">
+                                        <!-- Indikator Carousel -->
+                                        @if ($post->media->count() > 1)
+                                            <div class="carousel-indicators">
+                                                @foreach ($post->media as $index => $media)
+                                                    <button type="button"
+                                                        data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
+                                                        data-bs-slide-to="{{ $index }}"
+                                                        class="{{ $index === 0 ? 'active' : '' }}"
+                                                        aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                                                        aria-label="Slide {{ $index + 1 }}"></button>
+                                                @endforeach
+                                            </div>
+                                        @endif
 
-                            <!-- Collaboration -->
-                            <div class="mb-3">
-                                <label for="searchUsersEdit{{ $post->id }}" class="form-label">Cari
-                                    Collaborators</label>
-                                <input type="text" id="searchUsersEdit{{ $post->id }}" class="form-control"
-                                    placeholder="Cari nama atau username">
+                                        <!-- Item Media -->
+                                        @foreach ($post->media as $index => $media)
+                                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                                <div class="d-flex justify-content-center align-items-center h-100">
+                                                    @if ($media->type === 'image')
+                                                        <img src="{{ Storage::url($media->file_url) }}" alt="Post Image"
+                                                            class="img-fluid"
+                                                            style="max-height: 70vh; width: 100%; object-fit: contain;">
+                                                    @elseif ($media->type === 'video')
+                                                        <video controls class="w-100"
+                                                            style="max-height: 70vh; object-fit: contain;">
+                                                            <source src="{{ Storage::url($media->file_url) }}"
+                                                                type="video/mp4">
+                                                            Browser Anda tidak mendukung elemen video.
+                                                        </video>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
 
-                                <!-- Daftar Collaborators yang Dipilih -->
-                                <div id="selectedCollaboratorsEdit{{ $post->id }}" class="mt-3">
-                                    @foreach ($post->collaborators as $collaborator)
-                                        <div class="d-flex align-items-center justify-content-between mb-2 p-2 bg-light rounded"
-                                            data-user-id="{{ $collaborator->id }}">
-                                            <span>{{ $collaborator->name }} ({{ '@' . $collaborator->username }})</span>
-                                            <button type="button" class="btn btn-sm btn-outline-danger"
-                                                onclick="removeUserEdit{{ $post->id }}({{ $collaborator->id }})">
-                                                <i class="fas fa-times"></i> Hapus
-                                            </button>
-                                        </div>
-                                    @endforeach
+                                    <!-- Tombol Navigasi Carousel -->
+                                    @if ($post->media->count() > 1)
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
+                                            data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#modalMediaEditCarousel-{{ $post->id }}"
+                                            data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    @endif
                                 </div>
+                                <div class="w-100 ms-3">
+                                    <!-- Caption -->
+                                    <div class="mb-3">
+                                        <label for="caption{{ $post->id }}" class="form-label mb-0"
+                                            style="font-size: 35px">Caption</label>
+                                        <textarea name="caption" id="caption{{ $post->id }}" class="form-control @error('caption') is-invalid @enderror"
+                                            rows="3" style="font-size: 25px; border: 0;">{{ old('caption', $post->caption) }}</textarea>
+                                        @error('caption')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!-- Collaboration -->
+                                    <div class="mb-3">
+                                        <label for="searchUsersEdit{{ $post->id }}" class="form-label"
+                                            style="font-size: 25px">Cari
+                                            Collaborators</label>
+                                        <input type="text" id="searchUsersEdit{{ $post->id }}"
+                                            class="form-control" placeholder="Cari nama atau username"
+                                            style="font-size: 25px">
 
-                                <!-- Input Hidden untuk Menyimpan ID Collaborators -->
-                                <input type="hidden" name="collaborators"
-                                    id="collaboratorsInputEdit{{ $post->id }}"
-                                    value="{{ $post->collaborators->pluck('id')->join(',') }}">
+                                        <!-- Daftar Collaborators yang Dipilih -->
+                                        <div id="selectedCollaboratorsEdit{{ $post->id }}" class="mt-3">
+                                            @foreach ($post->collaborators as $collaborator)
+                                                <div class="d-flex align-items-center justify-content-between mb-2 p-2 bg-light rounded"
+                                                    data-user-id="{{ $collaborator->id }}">
+                                                    <span style="font-size: 25px;">{{ $collaborator->name }}
+                                                        ({{ '@' . $collaborator->username }})
+                                                    </span>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        onclick="removeUserEdit{{ $post->id }}({{ $collaborator->id }})"
+                                                        style="font-size: 25px;">
+                                                        X Hapus
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+
+                                        <!-- Input Hidden untuk Menyimpan ID Collaborators -->
+                                        <input type="hidden" name="collaborators"
+                                            id="collaboratorsInputEdit{{ $post->id }}"
+                                            value="{{ $post->collaborators->pluck('id')->join(',') }}">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="modal-footer">
-                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="reset" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 25px;">Cancel</button>
+                            <button type="submit" class="btn btn-info" style="font-size: 25px;">Save Changes</button>
                         </div>
                     </form>
                 </div>
@@ -141,7 +206,8 @@
                                 let html = '';
 
                                 if (data.length === 0) {
-                                    html = '<p class="text-muted">Tidak ditemukan.</p>';
+                                    html =
+                                        '<p class="text-muted" style="font-size: 25px">Tidak ditemukan.</p>';
                                 } else {
                                     data.forEach(user => {
                                         const userId = parseInt(user.id);
@@ -158,9 +224,9 @@
                                         <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer border-bottom pb-2" onclick="selectUserEdit${postId}(${user.id}, '${user.name}', '${user.username}')">
                                             <div class="d-flex align-items-center">
                                                 <img src="${avatar}" class="rounded-circle me-3" style="object-fit: cover; width: 40px; height: 40px;" alt="${user.name}">
-                                                <div>
-                                                    <strong>${user.name}</strong><br>
-                                                    <small class="text-muted">@${user.username}</small>
+                                                <div style="font-size: 25px; line-height: 10px;">
+                                                    <p>${user.name}</p><br>
+                                                    <p class="text-muted">@${user.username}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -173,7 +239,7 @@
                             .catch(err => {
                                 console.error('Error saat fetch:', err);
                                 resultsContainerEdit.innerHTML =
-                                    '<p class="text-danger">Gagal memuat data.</p>';
+                                    '<p class="text-danger" style="font-size: 25px;">Gagal memuat data.</p>';
                             });
                     }, 300);
                 });
@@ -193,9 +259,9 @@
                             'd-flex align-items-center justify-content-between mb-2 p-2 bg-light rounded';
                         collaboratorDiv.setAttribute('data-user-id', userIdNum);
                         collaboratorDiv.innerHTML = `
-                    <span>${displayValue}</span>
-                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeUserEdit${postId}(${userIdNum})">
-                        <i class="fas fa-times"></i> Hapus
+                    <span style="font-size: 25px;">${displayValue}</span>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeUserEdit${postId}(${userIdNum})" style="font-size: 25px;">
+                        X Hapus
                     </button>
                 `;
                         selectedCollaboratorsDivEdit.appendChild(collaboratorDiv);

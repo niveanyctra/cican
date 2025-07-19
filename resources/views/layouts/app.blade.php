@@ -5,15 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Bootstrap demo</title>
+    <title>Narsee</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/tributejs@5.1.3/dist/tribute.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     {{-- <link rel="stylesheet" href="../../css/login.css"> --}}
     <style>
         .profile img {
@@ -26,7 +29,7 @@
 
 <body class="flex flex-col bg-gray-100 min-h-screen">
     @auth
-        <div class="flex flex-1">
+        <div class="flex flex-1 latar">
             @include('components.sidebar')
             <main class="flex-1 ml-64 p-8">
                 @yield('content')
@@ -48,7 +51,9 @@
     @endauth
 
     <script src="../../js/login.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
     </script>
     <script src="https://unpkg.com/tributejs@5.1.3/dist/tribute.js"></script>
     <script>
@@ -130,26 +135,178 @@
                 }
             });
 
-            const commentInput = document.getElementById('comment-input');
-            tribute.attach(commentInput);
-            const commentInput = document.getElementById('caption');
-            tribute.attach(caption);
+
+            const commentInputSnapee =
+                document.getElementsByClassName('comment-input-snapee')
+            if (commentInputSnapee) {
+                tribute.attach(commentInputSnapee);
+            }
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const tribute = new Tribute({
                 trigger: "@",
                 values: async (text, cb) => {
                     if (text.length >= 2) {
                         const res = await fetch(`/mention/users?query=${text}`);
                         const users = await res.json();
-                        cb(users.map(user => ({ key: user.username, value: user.username })));
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
                     } else {
                         cb([]);
                     }
                 },
-                selectTemplate: function (item) {
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInputTextee =
+                document.getElementsByClassName('comment-input-textee')
+            if (commentInputTextee) {
+                tribute.attach(commentInputTextee);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInputModal =
+                document.getElementById('comment-input-modal');
+            if (commentInputModal) {
+                tribute.attach(commentInputModal);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInputModalTextee = document.getElementById('comment-input-modal-textee')
+            if (commentInputModalTextee) {
+                tribute.attach(commentInputModalTextee);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
+                    return `@${item.original.key}`;
+                }
+            });
+
+
+            const commentInputIndexSnapee = document.getElementsByClassName('comment-input-index-snapee')
+            if (commentInputIndexSnapee) {
+                tribute.attach(commentInputIndexSnapee);
+            }
+        });
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tribute = new Tribute({
+            trigger: "@",
+            values: async (text, cb) => {
+                if (text.length >= 2) {
+                    try {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } catch (error) {
+                        console.error('Error fetching mention users:', error);
+                        cb([]);
+                    }
+                } else {
+                    cb([]);
+                }
+            },
+            selectTemplate: function (item) {
+                return `@${item.original.key}`;
+            }
+        });
+
+        const commentInputs = document.querySelectorAll('.comment-input');
+        commentInputs.forEach(input => {
+            tribute.attach(input);
+        });
+    });
+</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tribute = new Tribute({
+                trigger: "@",
+                values: async (text, cb) => {
+                    if (text.length >= 2) {
+                        const res = await fetch(`/mention/users?query=${text}`);
+                        const users = await res.json();
+                        cb(users.map(user => ({
+                            key: user.username,
+                            value: user.username
+                        })));
+                    } else {
+                        cb([]);
+                    }
+                },
+                selectTemplate: function(item) {
                     return `@${item.original.key}`;
                 }
             });

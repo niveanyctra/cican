@@ -3,36 +3,37 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Following</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="d-flex w-100 justify-content-center pt-2">
+                    <p style="font-size: 50px; line-height: 10px;">Followers</p>
+                </div>
             </div>
             <div class="modal-body">
                 @forelse ($user->followings as $following)
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="d-flex align-items-center">
-                            <img src="{{ Storage::url($following->avatar ?? asset('default-image.jpg')) }}"
-                                class="rounded-circle me-3" width="45" height="45"
-                                style="object-fit: cover;max-width: 45px;height: 45px;">
-                            <div>
-                                <div class="fw-bold">{{ $following->name }}</div>
-                                <small class="text-muted">{{ $following->username }}</small>
+                        <a href="{{ route('user.show', $following->username) }}"
+                            class="list-group-item list-group-item-action d-flex align-items-center">
+                            <img src="{{ Storage::url($following->avatar ?? 'default-image.jpg') }}" alt="Avatar"
+                                style="object-fit: cover; width: 50px; height: 50px;" class="rounded-circle me-2">
+                            <div style="line-height: 12px">
+                                <p style="font-size: 30px">{{ $following->name }}</p> <br>
+                                <p style="font-size: 25px; opacity: 50%;">{{ '@' . $following->username }}</p>
                             </div>
-                        </div>
+                        </a>
 
                         @auth
                             @if ($following->id !== auth()->id())
                                 @if (auth()->user()->followings->contains($following->id))
-                                    <button class="btn btn-sm btn-outline-secondary follow-btn"
-                                        data-user-id="{{ $following->id }}">Unfollow</button>
+                                    <button class="btn btn-sm btn-secondary follow-btn"
+                                        data-user-id="{{ $following->id }}" style="font-size: 25px">Unfollow</button>
                                 @else
-                                    <button class="btn btn-sm btn-outline-primary follow-btn"
-                                        data-user-id="{{ $following->id }}">Follow</button>
+                                    <button class="btn btn-sm btn-primary follow-btn"
+                                        data-user-id="{{ $following->id }}" style="font-size: 25px">Follow</button>
                                 @endif
                             @endif
                         @endauth
                     </div>
                 @empty
-                    <p class="text-muted">Belum ada following.</p>
+                    <p class="text-muted" style="font-size: 30px">Belum ada following.</p>
                 @endforelse
             </div>
         </div>

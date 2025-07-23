@@ -19,7 +19,7 @@
                 <h1>Login</h1>
                 <div class="input-box">
                     <input type="text" name="username" id="username"
-                        class="form-control @error('username') is-invalid @enderror" placeholder="Masukkan username"
+                        class="form-control @error('username') is-invalid @enderror" placeholder="Enter username"
                         value="{{ old('username') }}" required>
                     @error('username')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="input-box">
                     <input type="password" name="password" id="password"
-                        class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password"
+                        class="form-control @error('password') is-invalid @enderror" placeholder="Enter password"
                         required>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -46,7 +46,7 @@
                 <h1>Registration</h1>
                 <div class="input-box">
                     <input type="text" name="username" id="register-username"
-                        class="form-control @error('username') is-invalid @enderror" placeholder="Masukkan username"
+                        class="form-control @error('username') is-invalid @enderror" placeholder="Enter username"
                         value="{{ old('username') }}" required>
                     @error('username')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="input-box">
                     <input type="password" name="password" id="register-password"
-                        class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password"
+                        class="form-control @error('password') is-invalid @enderror" placeholder="Enter password"
                         required>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="input-box">
                     <input type="email" name="email" id="register-email"
-                        class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan email"
+                        class="form-control @error('email') is-invalid @enderror" placeholder="Enter email"
                         value="{{ old('email') }}" required>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="input-box">
                     <input type="text" name="name" id="register-name"
-                        class="form-control @error('name') is-invalid @enderror" placeholder="Masukkan nama lengkap"
+                        class="form-control @error('name') is-invalid @enderror" placeholder="Enter full name"
                         value="{{ old('name') }}" required>
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>

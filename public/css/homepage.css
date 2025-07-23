@@ -57,7 +57,7 @@ body {
 
 /* Styling untuk span text dalam nav-btn */
 .nav-btn span {
-    font-size: 25px;
+    font-size: 30px;
     color: white;
     transition: color 0.3s ease;
 }
@@ -65,8 +65,8 @@ body {
 /* Styling untuk gambar dan SVG dalam nav-btn */
 .nav-btn img,
 .nav-btn svg {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     transition: filter 0.3s ease;
 }
 

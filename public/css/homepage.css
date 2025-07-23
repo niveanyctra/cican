@@ -115,12 +115,12 @@ body {
 
 .logout-btn span {
     color: #FF2627;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .logout-btn img {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
 }
 
 /* Hover effect untuk logout button */
